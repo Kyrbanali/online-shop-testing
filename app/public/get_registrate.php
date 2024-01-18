@@ -5,15 +5,35 @@
         <hr>
 
         <label for="name"><b>Name</b></label>
+        <?php   if (isset($errors['name'])): ?>
+            <div class="labelError">
+                <label><?php echo $errors['name']; ?></label>
+            </div>
+        <?php endif; ?>
         <input type="text" placeholder="Enter Name" name="name" id="name" required>
 
         <label for="email"><b>Email</b></label>
+        <?php   if (isset($errors['email'])): ?>
+            <div class="labelError">
+                <label><?php echo $errors['email']; ?></label>
+            </div>
+        <?php endif; ?>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>
+        <?php   if (isset($errors['psw'])): ?>
+            <div class="labelError">
+                <label><?php echo $errors['psw']; ?></label>
+            </div>
+        <?php endif; ?>
         <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
+        <?php   if (isset($errors['psw-repeat'])): ?>
+            <div class="labelError">
+                <label><?php echo $errors['psw-repeat']; ?></label>
+            </div>
+        <?php endif; ?>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>
 
@@ -27,6 +47,10 @@
 </form>
 
 <style>
+    .labelError {
+        color: red;
+    }
+
     * {box-sizing: border-box}
 
     /* Add padding to containers */
