@@ -79,9 +79,8 @@ if (empty($errors)) {
     print_r($data);
 
 } else {
-    print_r($errors);
+    require_once('./get_registrate.php');
 }
 
-if (!empty($errors)) require_once('./get_registrate.php');
 
 ?>
