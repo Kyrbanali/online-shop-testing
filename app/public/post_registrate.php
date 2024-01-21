@@ -1,72 +1,85 @@
 <?php
 
-$errors = [];
 
-if (isset($_POST['name']))
+
+function validate(array $data) : array
 {
-    $name = $_POST['name'];
-    if (strlen($name) < 2)
+    $errors = [];
+
+    if (isset($data['name']))
     {
-        $errors['name'] = "Name length must be more than 1 character";
+        $name = $data['name'];
+        if (strlen($name) < 2)
+        {
+            $errors['name'] = "Name length must be more than 1 character";
 
-    }
-    if (preg_match("/\d/", $name))
-    {
-        $errors['name'] = "the name should not contain numbers";
+        }
+        if (preg_match("/\d/", $name))
+        {
+            $errors['name'] = "the name should not contain numbers";
 
-    }
-} else {
-    $errors['name'] = 'Name is empty';
-}
-
-if (isset($_POST['email']))
-{
-    $email = $_POST['email'];
-    if (strlen($email) < 2)
-    {
-        $errors['email'] = "Email length must be more than 1 character";
-
-    }
-    if (str_contains($email, '@'))
-    {
-
+        }
     } else {
-        $errors['email'] = "email doesn't contain '@' ";
+        $errors['name'] = 'Name is empty';
     }
-} else {
-    $errors['email'] = 'email is empty';
+
+    if (isset($data['email']))
+    {
+        $email = $data['email'];
+        if (strlen($email) < 2)
+        {
+            $errors['email'] = "Email length must be more than 1 character";
+
+        }
+        if (str_contains($email, '@'))
+        {
+
+        } else {
+            $errors['email'] = "email doesn't contain '@' ";
+        }
+    } else {
+        $errors['email'] = 'email is empty';
+    }
+
+    if (isset($data['psw']))
+    {
+        $password = $data['psw'];
+        if (strlen($password) < 4)
+        {
+            $errors['psw'] = "Psw length must be more than 3 character";
+        }
+    } else {
+        $errors['psw'] = 'psw is empty';
+    }
+
+    if (isset($data['psw-repeat']))
+    {
+        $passwordRepeat = $data['psw-repeat'];
+        if (strlen($passwordRepeat) < 4)
+        {
+            $errors['psw-repeat'] = "Psw-repeat length must be more than 3 character";
+        }
+        if ($password !== $passwordRepeat)
+        {
+            $errors['psw-repeat'] = "Password mismatch";
+        }
+    } else {
+        $errors['psw-repeat'] = "psw-repeat is empty";
+    }
+
+    return $errors;
 }
 
-if (isset($_POST['psw']))
-{
-    $password = $_POST['psw'];
-    if (strlen($password) < 4)
-    {
-        $errors['psw'] = "Psw length must be more than 3 character";
-    }
-} else {
-    $errors['psw'] = 'psw is empty';
-}
-
-if (isset($_POST['psw-repeat']))
-{
-    $passwordRepeat = $_POST['psw-repeat'];
-    if (strlen($passwordRepeat) < 4)
-    {
-        $errors['psw-repeat'] = "Psw-repeat length must be more than 3 character";
-    }
-    if ($password !== $passwordRepeat)
-    {
-        $errors['psw-repeat'] = "Password mismatch";
-    }
-} else {
-    $errors['psw-repeat'] = "psw-repeat is empty";
-}
 
 
 
+$errors = validate($_POST);
 
 if (empty($errors)) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['psw'];
+    $passwordRepeat = $_POST['psw-repeat'];
     $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
 
     $stmt = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
