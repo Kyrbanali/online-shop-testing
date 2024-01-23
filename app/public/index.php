@@ -1,2 +1,1 @@
-<?php
-echo 123;
+<?php  require_once './../View/nav.php'; ?>
