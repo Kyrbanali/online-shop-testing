@@ -75,7 +75,6 @@ switch ($requestUri)
 
         break;
 
-
     case '/catalog':
         require_once './../Controller/ProductController.php';
 
@@ -93,6 +92,23 @@ switch ($requestUri)
                 break;
         }
 
+        break;
+
+    case '/addProduct':
+        require_once './../Controller/ProductController.php';
+
+        switch ($requestMethod)
+        {
+            case 'POST':
+                $obj = new ProductController();
+                $obj->addProduct();
+                header('Location: /catalog');
+                break;
+
+            default:
+                echo "метод $requestMethod не поддерживается для запроса $requestUri";
+                break;
+        }
         break;
 
     default:

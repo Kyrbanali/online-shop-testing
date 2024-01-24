@@ -12,6 +12,11 @@
                 <label><?php echo $errors['email']; ?></label>
             </div>
         <?php endif; ?>
+        <?php   if (isset($errors['user'])): ?>
+            <div class="labelError">
+                <label><?php echo $errors['user']; ?></label>
+            </div>
+        <?php endif; ?>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>

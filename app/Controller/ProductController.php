@@ -1,7 +1,20 @@
 <?php
 
+
 class ProductController
 {
+    private Product $product;
+
+    private UserProduct $userProduct;
+
+    public function __construct()
+    {
+        require_once './../Model/Product.php';
+        require_once './../Model/UserProduct.php';
+
+        $this->product = new Product();
+        $this->userProduct = new UserProduct();
+    }
     public function getCatalog()
     {
         session_start();
@@ -10,10 +23,9 @@ class ProductController
             header('Location: /login');
         }
 
-        $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
 
-        $stmt = $pdo->query('SELECT * FROM products');
-        $products = $stmt->fetchAll();
+
+        $products = $this->product->getAll();
 
 
         require_once './../View/catalog.phtml';
@@ -27,9 +39,48 @@ class ProductController
             header('Location: /login');
         }
 
-        $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
+        $errors = $this->validate($_POST);
 
-        $stmt = $pdo->prepare('INSERT INTO user_products (user_id, product_id) VALUES (:user_id, :product_id)');
-        $stmt->execute(['user_id' => $_SESSION['user_id'], 'product_id' => $_POST['product_id']]);
+        if (empty($errors))
+        {
+            $userId = $_SESSION['user_id'];
+            $productId = $_POST['product_id'];
+            $quantity = $_POST['quantity'];
+
+
+            $this->userProduct->create($userId, $productId, $quantity);
+        }
+        else {
+            //require_once './../View/catalog.phtml';
+        }
+
     }
+
+    public function getCartProducts()
+    {
+
+    }
+    private function validate(array $data): array
+    {
+        $errors = [];
+
+        if (!isset($data['product_id']))
+        {
+            $errors['product'] = 'product is empty';
+        }
+
+        if (isset($data['quantity']))
+        {
+            $quantity = $data['quantity'];
+            if ($quantity < 1)
+            {
+                $errors['quantity'] = "there must be at least 1 product";
+            }
+        } else {
+            $errors['quantity'] = 'quantity is empty';
+        }
+
+        return $errors;
+    }
+
 }

@@ -1,30 +1,29 @@
 <div class="products">
-    <?php
+    <?php foreach ($products as $product): ?>
+        <div class="product">
+            <img src="<?php echo $product["img_url"]; ?>">
 
-    foreach ($products as $product)
-    {
-        echo '
-                    <div class="product">
-                    <img src="'.$product["img_url"].'">
-                    
-                    <h1>'.$product["name"].'</h1>
-                    
-                    <h2>'.$product["description"].'</h2>
-                    
-                    <p>'.$product["price"].' ₽</p>
-                    <div >
-                        <form action="post_addProduct.php" method="post">
-                        
-                            <input type="hidden" name="product_id" value="'.$product["id"].'">
-                            <button type="submit">Добавить в корзину</button>
+            <h1><?php echo $product["name"]; ?></h1>
 
-                        </form>
-                    </div>
-                </div>
-            ';
-    }
+            <h2><?php echo $product["description"]; ?></h2>
 
-    ?>
+            <p><?php echo $product["price"]; ?> ₽</p>
+            <div>
+                <form action="/addProduct" method="post">
+
+                    <input type="hidden" name="product_id" value="<?php echo $product["id"]; ?>">
+                    <?php   if (isset($errors['quantity'])): ?>
+                        <div class="labelError">
+                            <label><?php echo $errors['quantity']; ?></label>
+                        </div>
+                    <?php endif; ?>
+
+                    <input type="number" name="quantity" value="1">
+                    <button type="submit">Добавить в корзину</button>
+                </form>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>
 
 

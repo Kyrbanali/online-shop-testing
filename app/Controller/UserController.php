@@ -2,16 +2,21 @@
 
 class UserController
 {
+    private User $userModel;
+    public function __construct()
+    {
+        require_once './../Model/User.php';
+
+        $this->userModel = new User();
+    }
     public function getRegistrate()
     {
         require_once './../View/get_registrate.phtml';
     }
-
     public function getLogin()
     {
         require_once './../View/get_login.phtml';
     }
-
     public function postLogin()
     {
         $errors = $this->validateLogin($_POST);
@@ -21,26 +26,24 @@ class UserController
             $email = $_POST['email'];
             $password = $_POST['psw'];
 
-            $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
+            $user = $this->userModel->getByEmail($email);
 
-            $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
-            $stmt->execute(['email' => $email]);
-
-            if (!$stmt->rowCount())
+            if (!$user)
             {
                 $errors['user'] = 'Пользователь с такими данными не зарегистрирован';
             }
-
-            $user = $stmt->fetch();
-
-
-            if (password_verify($password, $user['password']))
+            else
             {
-                session_start();
-                $_SESSION['user_id'] = $user['id'];
-                header('Location: /catalog');
+                if (isset($user['password']) && $this->userModel->verifyPassword($password, $user['password']))
+                {
+                    session_start();
+                    $_SESSION['user_id'] = $user['id'];
+                    header('Location: /catalog');
+                }
+                $errors['psw'] = 'wrong password';
             }
-            $errors['psw'] = 'wrong password';
+
+
         }
         require_once('./../View/get_login.phtml');
     }
@@ -52,13 +55,8 @@ class UserController
             $name = $_POST['name'];
             $email = $_POST['email'];
             $password = $_POST['psw'];
-            $passwordRepeat = $_POST['psw-repeat'];
-            $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
 
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-
-            $stmt = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :hash)');
-            $stmt->execute(['name' => $name, 'email' => $email, 'hash' => $hash]);
+            $this->userModel->registrate($name, $email, $password);
 
 
             header('Location: /login');
@@ -66,7 +64,6 @@ class UserController
         }
         require_once './../View/get_registrate.phtml';
     }
-
     public function postLogout()
     {
         session_start();
