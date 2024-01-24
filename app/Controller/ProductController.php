@@ -7,7 +7,7 @@ class ProductController
         session_start();
         if (!isset($_SESSION['user_id']))
         {
-            header('Location: ./get_login.php');
+            header('Location: /login');
         }
 
         $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
@@ -16,11 +16,20 @@ class ProductController
         $products = $stmt->fetchAll();
 
 
-        require_once './../View/catalog.php';
+        require_once './../View/catalog.phtml';
     }
 
     public function addProduct()
     {
+        session_start();
+        if (!isset($_SESSION['user_id']))
+        {
+            header('Location: /login');
+        }
 
+        $pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
+
+        $stmt = $pdo->prepare('INSERT INTO user_products (user_id, product_id) VALUES (:user_id, :product_id)');
+        $stmt->execute(['user_id' => $_SESSION['user_id'], 'product_id' => $_POST['product_id']]);
     }
 }

@@ -4,12 +4,12 @@ class UserController
 {
     public function getRegistrate()
     {
-        require_once './../View/get_registrate.php';
+        require_once './../View/get_registrate.phtml';
     }
 
     public function getLogin()
     {
-        require_once './../View/get_login.php';
+        require_once './../View/get_login.phtml';
     }
 
     public function postLogin()
@@ -38,11 +38,11 @@ class UserController
             {
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
-                header('Location: /main.php');
+                header('Location: /catalog');
             }
             $errors['psw'] = 'wrong password';
         }
-        else require_once('./../public/get_login.php');
+        require_once('./../View/get_login.phtml');
     }
     public function postRegistrate()
     {
@@ -61,17 +61,17 @@ class UserController
             $stmt->execute(['name' => $name, 'email' => $email, 'hash' => $hash]);
 
 
-            header('Location: ./main.php');
+            header('Location: /login');
 
         }
-        require_once('./../public/get_registrate.php');
+        require_once './../View/get_registrate.phtml';
     }
 
     public function postLogout()
     {
         session_start();
         $_SESSION['user_id'] = null;
-        header('Location: ./index.php');
+        header('/login');
     }
 
 
