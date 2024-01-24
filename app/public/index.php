@@ -84,7 +84,7 @@ switch ($requestUri)
                 $obj = new ProductController();
                 $obj->getCatalog();
 
-                require_once './../View/nav.html';
+
                 break;
 
             default:
@@ -108,6 +108,37 @@ switch ($requestUri)
             default:
                 echo "метод $requestMethod не поддерживается для запроса $requestUri";
                 break;
+        }
+        break;
+
+    case '/product':
+
+        switch ($requestMethod)
+        {
+            case 'GET':
+
+                break;
+
+            default:
+                echo "метод $requestMethod не поддерживается для запроса $requestUri";
+                break;
+
+        }
+        break;
+
+    case '/cart':
+        require_once './../Controller/ProductController.php';
+        switch ($requestMethod)
+        {
+            case 'GET':
+                $obj = new ProductController();
+                $obj->getCart();
+                break;
+
+            default:
+                echo "метод $requestMethod не поддерживается для запроса $requestUri";
+                break;
+
         }
         break;
 

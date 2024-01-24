@@ -1,0 +1,78 @@
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE)
+{
+    session_start();
+}
+
+?>
+
+
+<nav>
+    <ul>
+        <li><a href="">Главная</a></li>
+        <li><a href="/catalog">Каталог</a></li>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <div id="cart-container">
+                <a href="/cart">Корзина</a>
+                <span id="cart-count">3</span>
+            </div>
+            <li><a href="/logout">Выйти</a></li>
+        <?php else: ?>
+            <li><a href="/registrate">Регистрация</a></li>
+        <?php endif; ?>
+
+
+    </ul>
+</nav>
+
+
+
+<style>
+    nav {
+        background-color: #f2f2f2;
+        padding: 10px;
+    }
+
+    #cart-icon {
+        width: 40px;
+        height: 40px;
+
+    }
+
+    #cart-count {
+        background-color: red;
+        color: white;
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 12px;
+    }
+
+    #cart-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    li {
+        display: inline;
+        margin-right: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #333;
+        padding: 5px;
+    }
+
+    a:hover {
+        background-color: #333;
+        color: #fff;
+    }
+</style>

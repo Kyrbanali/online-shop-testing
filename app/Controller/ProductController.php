@@ -17,23 +17,63 @@ class ProductController
     }
     public function getCatalog()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE)
+        {
+            session_start();
+        }
         if (!isset($_SESSION['user_id']))
         {
             header('Location: /login');
         }
 
-
-
         $products = $this->product->getAll();
-
 
         require_once './../View/catalog.phtml';
     }
 
+    public function getCart()
+    {
+
+        if (session_status() !== PHP_SESSION_ACTIVE)
+        {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id']))
+        {
+            header('Location: /login');
+        }
+
+        $userId = $_SESSION['user_id'];
+
+        $products = $this->product->getAllToCart($userId);
+
+        require_once './../View/cart.phtml';
+    }
+
+    public function getCartInfo()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE)
+        {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id']))
+        {
+            header('Location: /login');
+        }
+
+        $userId = $_SESSION['user_id'];
+
+        $result = $this->product->getCartInfo($userId);
+
+        require_once './../View/cart.phtml';
+    }
+
     public function addProduct()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE)
+        {
+            session_start();
+        }
         if (!isset($_SESSION['user_id']))
         {
             header('Location: /login');
@@ -56,10 +96,6 @@ class ProductController
 
     }
 
-    public function getCartProducts()
-    {
-
-    }
     private function validate(array $data): array
     {
         $errors = [];

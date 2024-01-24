@@ -9,20 +9,7 @@
             <h2><?php echo $product["description"]; ?></h2>
 
             <p><?php echo $product["price"]; ?> ₽</p>
-            <div>
-                <form action="/addProduct" method="post">
 
-                    <input type="hidden" name="product_id" value="<?php echo $product["id"]; ?>">
-                    <?php   if (isset($errors['quantity'])): ?>
-                        <div class="labelError">
-                            <label><?php echo $errors['quantity']; ?></label>
-                        </div>
-                    <?php endif; ?>
-
-                    <input type="number" name="quantity" value="1">
-                    <button type="submit">Добавить в корзину</button>
-                </form>
-            </div>
         </div>
     <?php endforeach; ?>
 </div>
