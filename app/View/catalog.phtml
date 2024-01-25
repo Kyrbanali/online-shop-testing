@@ -1,4 +1,7 @@
 <?php require_once './../View/nav.phtml'; ?>
+<?php if (isset($result)): ?>
+<h1><?php print_r($result['total_quantity']) ?></h1>
+<?php endif; ?>
 <div class="products">
     <?php foreach ($products as $product): ?>
         <div class="product">

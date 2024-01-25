@@ -26,12 +26,11 @@ class Product extends Model
     public function getCartInfo($userId)
     {
         $sql = "
-            SELECT users.name, SUM(products.quantity) as total_quantity
+            SELECT users.name, SUM(user_products.quantity) as total_quantity
             FROM users
             JOIN user_products ON users.id = user_products.user_id
-            JOIN products ON user_products.product_id = products.id
             WHERE users.id = :user_id
-            GROUP BY users.name
+            GROUP BY users.id;
         ";
 
         $stmt = $this->pdo->prepare($sql);

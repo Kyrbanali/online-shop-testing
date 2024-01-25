@@ -2,12 +2,15 @@
 
 class UserController
 {
+    private SessionService $sessionService;
     private User $userModel;
     public function __construct()
     {
         require_once './../Model/User.php';
+        require_once './../Service/SessionService.php';
 
         $this->userModel = new User();
+        $this->sessionService = new SessionService();
     }
     public function getRegistrate()
     {
@@ -36,9 +39,7 @@ class UserController
             {
                 if (isset($user['password']) && $this->userModel->verifyPassword($password, $user['password']))
                 {
-                    session_start();
-                    $_SESSION['user_id'] = $user['id'];
-                    header('Location: /catalog');
+                    $this->sessionService->setUser($user);
                 }
                 $errors['psw'] = 'wrong password';
             }
@@ -66,9 +67,7 @@ class UserController
     }
     public function postLogout()
     {
-        session_start();
-        $_SESSION['user_id'] = null;
-        header('/login');
+        $this->sessionService->logout();
     }
 
 

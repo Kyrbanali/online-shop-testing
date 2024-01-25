@@ -4,29 +4,26 @@
 class ProductController
 {
     private Product $product;
-
     private UserProduct $userProduct;
+    private SessionService $sessionService;
 
     public function __construct()
     {
         require_once './../Model/Product.php';
         require_once './../Model/UserProduct.php';
+        require_once './../Service/SessionService.php';
 
         $this->product = new Product();
         $this->userProduct = new UserProduct();
+        $this->sessionService = new SessionService();
     }
     public function getCatalog()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE)
-        {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id']))
-        {
-            header('Location: /login');
-        }
+        $this->sessionService->requireLoggedInUser();
+        $userId = $_SESSION['user_id'];
 
         $products = $this->product->getAll();
+        $result = $this->product->getCartInfo($userId);
 
         require_once './../View/catalog.phtml';
     }
@@ -34,14 +31,7 @@ class ProductController
     public function getCart()
     {
 
-        if (session_status() !== PHP_SESSION_ACTIVE)
-        {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id']))
-        {
-            header('Location: /login');
-        }
+        $this->sessionService->requireLoggedInUser();
 
         $userId = $_SESSION['user_id'];
 
@@ -50,34 +40,9 @@ class ProductController
         require_once './../View/cart.phtml';
     }
 
-    public function getCartInfo()
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE)
-        {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id']))
-        {
-            header('Location: /login');
-        }
-
-        $userId = $_SESSION['user_id'];
-
-        $result = $this->product->getCartInfo($userId);
-
-        require_once './../View/cart.phtml';
-    }
-
     public function addProduct()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE)
-        {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id']))
-        {
-            header('Location: /login');
-        }
+        $this->sessionService->requireLoggedInUser();
 
         $errors = $this->validate($_POST);
 

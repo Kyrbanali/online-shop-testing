@@ -83,6 +83,7 @@ switch ($requestUri)
             case 'GET':
                 $obj = new ProductController();
                 $obj->getCatalog();
+                $obj->getCartInfo();
 
 
                 break;
