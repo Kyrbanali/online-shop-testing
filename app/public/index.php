@@ -4,6 +4,28 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+$autoloader = function (string $class) : bool
+{
+    $prefixes = [
+        'Controller' => './../Controller/',
+        'Model' => './../Model/',
+        'Service' => './../Service/'
+    ];
+
+    foreach ($prefixes as $namespace => $path)
+    {
+        $file = $path . str_replace('\\','/',substr($class, strlen($namespace)) . '.php');
+
+        if (file_exists($file))
+        {
+            require_once $file;
+            return true;
+        }
+        return false;
+    }
+
+};
+
 $controllerAutoloader = function (string $class)
 {
     $path = "./../Controller/$class.php";
@@ -43,6 +65,8 @@ $serviceAutoloader = function (string $class)
 spl_autoload_register($controllerAutoloader);
 spl_autoload_register($modelAutoloader);
 spl_autoload_register($serviceAutoloader);
+
+//spl_autoload_register($autoloader);
 
 
 switch ($requestUri)
@@ -128,13 +152,13 @@ switch ($requestUri)
 
         break;
 
-    case '/addProduct':
+    case '/processCart':
 
         switch ($requestMethod)
         {
             case 'POST':
                 $obj = new ProductController();
-                $obj->addProduct();
+                $obj->processCart();
                 header('Location: /catalog');
                 break;
 

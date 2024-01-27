@@ -1,6 +1,5 @@
 <?php
 
-
 class SessionService
 {
     public function startSession() : void

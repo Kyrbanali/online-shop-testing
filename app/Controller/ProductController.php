@@ -37,7 +37,7 @@ class ProductController
         require_once './../View/cart.phtml';
     }
 
-    public function addProduct()
+    public function processCart() : void
     {
         $this->sessionService->requireLoggedInUser();
 
@@ -47,13 +47,18 @@ class ProductController
         {
             $userId = $_SESSION['user_id'];
             $productId = $_POST['product_id'];
-            $quantity = $_POST['quantity'];
+            $action = $_POST['action'];
 
+            switch ($action)
+            {
+                case 'inc':
+                    $this->userProduct->updateOrCreate($userId, $productId);
+                    break;
 
-            $this->userProduct->create($userId, $productId, $quantity);
-        }
-        else {
-            //require_once './../View/catalog.phtml';
+                case 'dec':
+                    $this->userProduct->updateOrDelete($userId, $productId);
+                    break;
+            }
         }
 
     }
@@ -67,17 +72,6 @@ class ProductController
         if (!isset($data['product_id']))
         {
             $errors['product'] = 'product is empty';
-        }
-
-        if (isset($data['quantity']))
-        {
-            $quantity = $data['quantity'];
-            if ($quantity < 1)
-            {
-                $errors['quantity'] = "there must be at least 1 product";
-            }
-        } else {
-            $errors['quantity'] = 'quantity is empty';
         }
 
         return $errors;

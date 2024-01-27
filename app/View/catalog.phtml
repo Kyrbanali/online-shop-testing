@@ -11,17 +11,12 @@
 
             <p><?php echo $product["price"]; ?> ₽</p>
             <div>
-                <form action="/addProduct" method="post">
+                <form action="/processCart" method="post">
 
                     <input type="hidden" name="product_id" value="<?php echo $product["id"]; ?>">
-                    <?php   if (isset($errors['quantity'])): ?>
-                        <div class="labelError">
-                            <label><?php echo $errors['quantity']; ?></label>
-                        </div>
-                    <?php endif; ?>
 
-                    <input type="number" name="quantity" value="1">
-                    <button type="submit">Добавить в корзину</button>
+                    <button type="submit" name="action" value="inc">+</button>
+                    <button type="submit" name="action" value="dec">-</button>
                 </form>
             </div>
         </div>
