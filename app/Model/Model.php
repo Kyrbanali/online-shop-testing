@@ -7,6 +7,5 @@ class Model
     public function __construct()
     {
         $this->pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
-
     }
 }

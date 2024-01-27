@@ -9,10 +9,6 @@ class ProductController
 
     public function __construct()
     {
-        require_once './../Model/Product.php';
-        require_once './../Model/UserProduct.php';
-        require_once './../Service/SessionService.php';
-
         $this->product = new Product();
         $this->userProduct = new UserProduct();
         $this->sessionService = new SessionService();
@@ -36,6 +32,7 @@ class ProductController
         $userId = $_SESSION['user_id'];
 
         $products = $this->product->getAllToCart($userId);
+        $result = $this->product->getCartInfo($userId);
 
         require_once './../View/cart.phtml';
     }
@@ -60,6 +57,8 @@ class ProductController
         }
 
     }
+
+
 
     private function validate(array $data): array
     {

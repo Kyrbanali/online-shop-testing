@@ -3,16 +3,15 @@
 
 class SessionService
 {
-    public function startSession()
+    public function startSession() : void
     {
         if (session_status() !== PHP_SESSION_ACTIVE)
         {
             session_start();
         }
-
     }
 
-    public function requireLoggedInUser()
+    public function requireLoggedInUser() : void
     {
         $this->startSession();
 
@@ -22,7 +21,7 @@ class SessionService
         }
     }
 
-    public function logout()
+    public function logout() : void
     {
         $this->startSession();
 
@@ -30,7 +29,7 @@ class SessionService
         header('/login');
     }
 
-    public function setUser($user)
+    public function setUser(array $user) : void
     {
         $this->startSession();
 

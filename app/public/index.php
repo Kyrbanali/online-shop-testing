@@ -4,12 +4,50 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+$controllerAutoloader = function (string $class)
+{
+    $path = "./../Controller/$class.php";
+    if (file_exists($path))
+    {
+        require_once $path;
+
+        return true;
+    }
+    return false;
+};
+
+$modelAutoloader = function (string $class)
+{
+    $path = "./../Model/$class.php";
+    if (file_exists($path))
+    {
+        require_once $path;
+
+        return true;
+    }
+    return false;
+};
+
+$serviceAutoloader = function (string $class)
+{
+    $path = "./../Service/$class.php";
+    if (file_exists($path))
+    {
+        require_once $path;
+
+        return true;
+    }
+    return false;
+};
+
+spl_autoload_register($controllerAutoloader);
+spl_autoload_register($modelAutoloader);
+spl_autoload_register($serviceAutoloader);
+
+
 switch ($requestUri)
 {
     case '/registrate':
-
-        require_once './../Controller/UserController.php';
-
 
         $obj = new UserController();
 
@@ -30,8 +68,6 @@ switch ($requestUri)
         break;
 
     case '/login':
-
-        require_once './../Controller/UserController.php';
 
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -57,7 +93,6 @@ switch ($requestUri)
 
     case '/logout':
 
-        require_once './../Controller/UserController.php';
         switch ($requestMethod)
         {
             case 'GET':
@@ -76,14 +111,12 @@ switch ($requestUri)
         break;
 
     case '/catalog':
-        require_once './../Controller/ProductController.php';
 
         switch ($requestMethod)
         {
             case 'GET':
                 $obj = new ProductController();
                 $obj->getCatalog();
-                $obj->getCartInfo();
 
 
                 break;
@@ -96,7 +129,6 @@ switch ($requestUri)
         break;
 
     case '/addProduct':
-        require_once './../Controller/ProductController.php';
 
         switch ($requestMethod)
         {
@@ -128,7 +160,6 @@ switch ($requestUri)
         break;
 
     case '/cart':
-        require_once './../Controller/ProductController.php';
         switch ($requestMethod)
         {
             case 'GET':

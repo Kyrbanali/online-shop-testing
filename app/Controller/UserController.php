@@ -6,9 +6,6 @@ class UserController
     private User $userModel;
     public function __construct()
     {
-        require_once './../Model/User.php';
-        require_once './../Service/SessionService.php';
-
         $this->userModel = new User();
         $this->sessionService = new SessionService();
     }
