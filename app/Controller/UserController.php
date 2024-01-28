@@ -1,6 +1,9 @@
 <?php
 
+namespace Controller;
 
+use Model\User;
+use Service\SessionService;
 class UserController
 {
     private SessionService $sessionService;

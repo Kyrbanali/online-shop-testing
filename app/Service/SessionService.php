@@ -1,5 +1,6 @@
 <?php
 
+namespace Service;
 class SessionService
 {
     public function startSession() : void

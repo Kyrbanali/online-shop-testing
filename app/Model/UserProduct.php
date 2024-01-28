@@ -1,24 +1,31 @@
 <?php
-
+namespace Model;
 class UserProduct extends Model
 {
+    private function prepareExecute(int $userId, int $productId, $sql)
+    {
 
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+        return $stmt;
+    }
     private function recordExists(int $userId, int $productId) : bool
     {
-        $checkSql = "SELECT 1 FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-        $checkStmt = $this->pdo->prepare($checkSql);
-        $checkStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
-        $recordExists = $checkStmt->fetchColumn();
 
-        return $recordExists ? true : false;
+        $checkSql = "SELECT COUNT(*) FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
 
+        $stmt = $this->prepareExecute($userId, $productId, $checkSql);
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
     }
 
-    private function getQuantity(int $userId, int $productId)
+    public function getQuantity(int $userId, int $productId)
     {
         $getQuantitySql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-        $getQuantityStmt = $this->pdo->prepare($getQuantitySql);
-        $getQuantityStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+        $getQuantityStmt = $this->prepareExecute($userId, $productId, $getQuantitySql);
 
         $quantity = $getQuantityStmt->fetchColumn();
 
@@ -27,19 +34,22 @@ class UserProduct extends Model
     }
     public function updateOrCreate(int $userId, int $productId) : void
     {
-
         $recordExists = $this->recordExists($userId, $productId);
 
         if ($recordExists)
         {
+
             $updateSql = "UPDATE user_products SET quantity = quantity + 1 WHERE user_id = :user_id AND product_id = :product_id";
-            $updateStmt = $this->pdo->prepare($updateSql);
-            $updateStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+            $this->prepareExecute($userId, $productId, $updateSql);
         }
-        else {
+        else
+        {
+
             $insertSql = "INSERT INTO user_products (user_id, product_id, quantity) VALUES (:user_id, :product_id, 1)";
-            $insertStmt = $this->pdo->prepare($insertSql);
-            $insertStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+            $this->prepareExecute($userId, $productId, $insertSql);
+
         }
     }
 
@@ -53,15 +63,15 @@ class UserProduct extends Model
             if ($quantity > 1)
             {
                 $updateSql = "UPDATE user_products SET quantity = quantity - 1 WHERE user_id = :user_id AND product_id = :product_id";
-                $updateStmt = $this->pdo->prepare($updateSql);
-                $updateStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+                $this->prepareExecute($userId, $productId, $updateSql);
             }
             elseif ($quantity === 1)
             {
 
                 $deleteSql = "DELETE FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-                $deleteStmt = $this->pdo->prepare($deleteSql);
-                $deleteStmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+
+                $this->prepareExecute($userId, $productId, $deleteSql);
             }
         }
         else

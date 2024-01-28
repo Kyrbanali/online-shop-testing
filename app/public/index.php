@@ -28,10 +28,11 @@ $autoloader = function (string $class) : bool
 
 $controllerAutoloader = function (string $class)
 {
-    $path = "./../Controller/$class.php";
-    if (file_exists($path))
+    $path = "./../$class.php";
+    $file = str_replace('\\','/',$path);
+    if (file_exists($file))
     {
-        require_once $path;
+        require_once $file;
 
         return true;
     }
@@ -40,10 +41,11 @@ $controllerAutoloader = function (string $class)
 
 $modelAutoloader = function (string $class)
 {
-    $path = "./../Model/$class.php";
-    if (file_exists($path))
+    $path = "./../$class.php";
+    $file = str_replace('\\','/',$path);
+    if (file_exists($file))
     {
-        require_once $path;
+        require_once $file;
 
         return true;
     }
@@ -52,10 +54,11 @@ $modelAutoloader = function (string $class)
 
 $serviceAutoloader = function (string $class)
 {
-    $path = "./../Service/$class.php";
-    if (file_exists($path))
+    $path = "./../$class.php";
+    $file = str_replace('\\','/',$path);
+    if (file_exists($file))
     {
-        require_once $path;
+        require_once $file;
 
         return true;
     }
@@ -73,7 +76,7 @@ switch ($requestUri)
 {
     case '/registrate':
 
-        $obj = new UserController();
+        $obj = new Controller\UserController();
 
         switch ($requestMethod)
         {
@@ -95,7 +98,7 @@ switch ($requestUri)
 
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        $obj = new UserController();
+        $obj = new Controller\UserController();
 
         switch ($requestMethod)
         {
@@ -120,7 +123,7 @@ switch ($requestUri)
         switch ($requestMethod)
         {
             case 'GET':
-                $obj = new UserController();
+                $obj = new Controller\UserController();
 
                 $obj->postLogout();
                 header('Location: /login');
@@ -139,7 +142,7 @@ switch ($requestUri)
         switch ($requestMethod)
         {
             case 'GET':
-                $obj = new ProductController();
+                $obj = new Controller\ProductController();
                 $obj->getCatalog();
 
 
@@ -157,7 +160,7 @@ switch ($requestUri)
         switch ($requestMethod)
         {
             case 'POST':
-                $obj = new ProductController();
+                $obj = new Controller\ProductController();
                 $obj->processCart();
                 header('Location: /catalog');
                 break;
@@ -187,7 +190,7 @@ switch ($requestUri)
         switch ($requestMethod)
         {
             case 'GET':
-                $obj = new ProductController();
+                $obj = new Controller\ProductController();
                 $obj->getCart();
                 break;
 

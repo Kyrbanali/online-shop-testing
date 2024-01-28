@@ -1,8 +1,12 @@
 <?php
 
-
+namespace Controller;
+use Model\Product;
+use Model\UserProduct;
+use Service\SessionService;
 class ProductController
 {
+
     private Product $product;
     private UserProduct $userProduct;
     private SessionService $sessionService;
@@ -43,8 +47,10 @@ class ProductController
 
         $errors = $this->validate($_POST);
 
+
         if (empty($errors))
         {
+
             $userId = $_SESSION['user_id'];
             $productId = $_POST['product_id'];
             $action = $_POST['action'];
@@ -52,7 +58,9 @@ class ProductController
             switch ($action)
             {
                 case 'inc':
+
                     $this->userProduct->updateOrCreate($userId, $productId);
+
                     break;
 
                 case 'dec':
