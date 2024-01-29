@@ -66,7 +66,7 @@ class UserController
         }
         require_once './../View/get_registrate.phtml';
     }
-    public function postLogout()
+    public function logout()
     {
         $this->sessionService->logout();
     }

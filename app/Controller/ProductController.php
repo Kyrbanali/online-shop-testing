@@ -1,6 +1,7 @@
 <?php
 
 namespace Controller;
+
 use Model\Product;
 use Model\UserProduct;
 use Service\SessionService;
