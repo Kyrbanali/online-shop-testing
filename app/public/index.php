@@ -7,7 +7,7 @@ require_once './../App.php';
 Autoloader::registrate();
 
 $app = new App();
-$app->run();
+$app->handleRequest();
 
 
 
