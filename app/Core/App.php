@@ -8,53 +8,37 @@ use Controller\UserController;
 
 class App
 {
-    private array $routes = [
-        '/registrate' => [
-            'GET' => [
-                'class' => UserController::class,
-                'method' => 'getRegistrate',
-            ],
-            'POST' => [
-                'class' => UserController::class,
-                'method' => 'postRegistrate',
-            ],
-        ],
-        '/login' => [
-            'GET' => [
-                'class' => UserController::class,
-                'method' => 'getLogin',
-            ],
-            'POST' => [
-                'class' => UserController::class,
-                'method' => 'postLogin',
-            ],
-        ],
-        '/logout' => [
-            'GET' => [
-                'class' => UserController::class,
-                'method' => 'logout',
-            ],
-        ],
-        '/catalog' => [
-            'GET' => [
-                'class' => ProductController::class,
-                'method' => 'getCatalog',
-            ],
-        ],
-        '/processCart' => [
-            'POST' => [
-                'class' => ProductController::class,
-                'method' => 'processCart',
-            ],
-        ],
-        '/cart' => [
-            'GET' => [
-                'class' => ProductController::class,
-                'method' => 'getCart',
-            ],
-        ],
-    ];
+    private array $routes = [];
 
+    public function getRoutes()
+    {
+        return $this->routes;
+
+    }
+    public function get($route, $class, $methodName) : void
+    {
+        $this->hasRoute($route);
+        $this->routes[$route]['GET'] = [
+            'class' => $class,
+            'method' => $methodName,
+        ];
+    }
+    public function post($route, $class, $methodName) : void
+    {
+        $this->hasRoute($route);
+        $this->routes[$route]['POST'] = [
+            'class' => $class,
+            'method' => $methodName,
+        ];
+
+    }
+    private function hasRoute($route)
+    {
+        if (!isset($this->routes[$route]))
+        {
+            $this->routes[$route] = [];
+        }
+    }
     public function handleRequest()
     {
         $requestUri = $_SERVER['REQUEST_URI'];
