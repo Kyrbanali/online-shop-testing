@@ -1,6 +1,8 @@
 <?php
 
 
+namespace Core;
+
 use Controller\ProductController;
 use Controller\UserController;
 
@@ -58,18 +60,15 @@ class App
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        if (isset($this->routes[$requestUri][$requestMethod]))
-        {
+        if (isset($this->routes[$requestUri][$requestMethod])) {
             $route = $this->routes[$requestUri][$requestMethod];
             $class = $route['class'];
             $method = $route['method'];
 
-            if (class_exists($class))
-            {
+            if (class_exists($class)) {
                 $obj = new $class();
 
-                if (method_exists($obj, $method))
-                {
+                if (method_exists($obj, $method)) {
                     $obj->$method();
                 } else {
                     echo "Метод $method не найден в классе $class";

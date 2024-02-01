@@ -1,8 +1,9 @@
 <?php
 
+namespace Core;
 class Autoloader
 {
-    public static function registrate()
+    public static function registrate(): void
     {
         $autoloader = function (string $class): bool {
             $file = './../' . str_replace('\\', '/', $class) . '.php';

@@ -69,6 +69,7 @@ class UserController
     public function logout()
     {
         $this->sessionService->logout();
+        header('Location: /login');
     }
 
 
