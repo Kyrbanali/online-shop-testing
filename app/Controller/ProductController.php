@@ -10,21 +10,19 @@ class ProductController
 
     private Product $product;
     private UserProduct $userProduct;
-    private SessionService $sessionService;
 
     public function __construct()
     {
         $this->product = new Product();
         $this->userProduct = new UserProduct();
-        $this->sessionService = new SessionService();
     }
     public function getCatalog()
     {
-        $this->sessionService->requireLoggedInUser();
+        SessionService::requireLoggedInUser();
         $userId = $_SESSION['user_id'];
 
         $products = $this->product->getAll();
-        $result = $this->product->getCartInfo($userId);
+        $result = $this->product->getCartQuantity($userId);
 
         require_once './../View/catalog.phtml';
     }
@@ -32,21 +30,21 @@ class ProductController
     public function getCart()
     {
 
-        $this->sessionService->requireLoggedInUser();
+        SessionService::requireLoggedInUser();
 
         $userId = $_SESSION['user_id'];
 
-        $products = $this->product->getAllToCart($userId);
-        $result = $this->product->getCartInfo($userId);
+        $products = $this->product->getAllFromCart($userId);
+        $result = $this->product->getCartQuantity($userId);
 
         require_once './../View/cart.phtml';
     }
 
     public function processCart() : void
     {
-        $this->sessionService->requireLoggedInUser();
+        SessionService::requireLoggedInUser();
 
-        $errors = $this->validate($_POST);
+        $errors = self::validate($_POST);
 
 
         if (empty($errors))
@@ -61,12 +59,16 @@ class ProductController
                 case 'inc':
 
                     $this->userProduct->updateOrCreate($userId, $productId);
+                    header("Location: /catalog");
 
                     break;
 
                 case 'dec':
                     $this->userProduct->updateOrDelete($userId, $productId);
+                    header("Location: /catalog");
+
                     break;
+
             }
         }
 
@@ -74,7 +76,7 @@ class ProductController
 
 
 
-    private function validate(array $data): array
+    private static function validate(array $data): array
     {
         $errors = [];
 

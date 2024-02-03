@@ -10,35 +10,26 @@ class App
 {
     private array $routes = [];
 
-    public function getRoutes()
+    public function getRoutes() : array
     {
         return $this->routes;
-
     }
-    public function get($route, $class, $methodName) : void
+    public function get(string $route, string $class, string $methodName) : void
     {
-        $this->hasRoute($route);
         $this->routes[$route]['GET'] = [
             'class' => $class,
             'method' => $methodName,
         ];
     }
-    public function post($route, $class, $methodName) : void
+    public function post(string $route, string $class, string $methodName) : void
     {
-        $this->hasRoute($route);
         $this->routes[$route]['POST'] = [
             'class' => $class,
             'method' => $methodName,
         ];
 
     }
-    private function hasRoute($route)
-    {
-        if (!isset($this->routes[$route]))
-        {
-            $this->routes[$route] = [];
-        }
-    }
+
     public function handleRequest()
     {
         $requestUri = $_SERVER['REQUEST_URI'];

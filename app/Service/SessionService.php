@@ -3,37 +3,34 @@
 namespace Service;
 class SessionService
 {
-    public function startSession() : void
+    public static function startSession() : void
     {
         if (session_status() !== PHP_SESSION_ACTIVE)
         {
             session_start();
         }
     }
-
-    public function requireLoggedInUser() : void
+    public static function requireLoggedInUser() : void
     {
-        $this->startSession();
+        self::startSession();
 
         if (!isset($_SESSION['user_id']))
         {
             header('Location: /login');
         }
     }
-
-    public function logout() : void
+    public static function logout() : void
     {
-        $this->startSession();
+        self::startSession();
 
         $_SESSION['user_id'] = null;
         header('/login');
     }
-
-    public function setUser(array $user) : void
+    public static function setUser(int $user_id) : void
     {
-        $this->startSession();
+        self::startSession();
 
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_id'] = $user_id;
         header('Location: /catalog');
     }
 }

@@ -3,17 +3,17 @@
 <div class="products">
     <?php foreach ($products as $product): ?>
         <div class="product">
-            <img src="<?php echo $product["img_url"]; ?>">
+            <img src="<?php echo $product->getImgUrl(); ?>">
 
-            <h1><?php echo $product["name"]; ?></h1>
+            <h1><?php echo $product->getName(); ?></h1>
 
-            <h2><?php echo $product["description"]; ?></h2>
+            <h2><?php echo $product->getDescription(); ?></h2>
 
-            <p><?php echo $product["price"]; ?> ₽</p>
+            <p><?php echo $product->getPrice(); ?> ₽</p>
             <div>
                 <form action="/processCart" method="post">
 
-                    <input type="hidden" name="product_id" value="<?php echo $product["id"]; ?>">
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
 
                     <button type="submit" name="action" value="inc">+</button>
                     <button type="submit" name="action" value="dec">-</button>

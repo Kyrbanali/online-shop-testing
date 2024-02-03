@@ -6,13 +6,6 @@ use Model\User;
 use Service\SessionService;
 class UserController
 {
-    private SessionService $sessionService;
-    private User $userModel;
-    public function __construct()
-    {
-        $this->userModel = new User();
-        $this->sessionService = new SessionService();
-    }
     public function getRegistrate()
     {
         require_once './../View/get_registrate.phtml';
@@ -23,14 +16,13 @@ class UserController
     }
     public function postLogin()
     {
-        $errors = $this->validateLogin($_POST);
-
+        $errors = self::validateLogin($_POST);
         if (empty($errors))
         {
             $email = $_POST['email'];
             $password = $_POST['psw'];
 
-            $user = $this->userModel->getByEmail($email);
+            $user = User::getOneByEmail($email);
 
             if (!$user)
             {
@@ -38,27 +30,25 @@ class UserController
             }
             else
             {
-                if (isset($user['password']) && $this->userModel->verifyPassword($password, $user['password']))
+                if (User::verifyPassword($password, $user->getPassword()))
                 {
-                    $this->sessionService->setUser($user);
+                    SessionService::setUser($user->getId());
                 }
                 $errors['psw'] = 'wrong password';
             }
-
-
         }
         require_once('./../View/get_login.phtml');
     }
     public function postRegistrate()
     {
-        $errors = $this->validate($_POST);
+        $errors = self::validate($_POST);
 
         if (empty($errors)) {
             $name = $_POST['name'];
             $email = $_POST['email'];
             $password = $_POST['psw'];
 
-            $this->userModel->registrate($name, $email, $password);
+            User::registrate($name, $email, $password);
 
 
             header('Location: /login');
@@ -68,12 +58,12 @@ class UserController
     }
     public function logout()
     {
-        $this->sessionService->logout();
+        SessionService::logout();
         header('Location: /login');
     }
 
 
-    private function validateLogin(array $data) : array
+    private static function validateLogin(array $data) : array
     {
         $errors = [];
 
@@ -110,7 +100,7 @@ class UserController
 
         return $errors;
     }
-    private function validate(array $data) : array
+    private static function validate(array $data) : array
     {
         $errors = [];
 
