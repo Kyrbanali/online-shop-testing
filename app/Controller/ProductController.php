@@ -39,42 +39,34 @@ class ProductController
 
         require_once './../View/cart.phtml';
     }
-
-    public function processCart() : void
+    public function plus()
     {
         SessionService::requireLoggedInUser();
 
         $errors = self::validate($_POST);
 
+        $userId = $_SESSION['user_id'];
+        $productId = $_POST['product_id'];
+        $action = $_POST['action'];
 
-        if (empty($errors))
-        {
-
-            $userId = $_SESSION['user_id'];
-            $productId = $_POST['product_id'];
-            $action = $_POST['action'];
-
-            switch ($action)
-            {
-                case 'inc':
-
-                    $this->userProduct->updateOrCreate($userId, $productId);
-                    header("Location: /catalog");
-
-                    break;
-
-                case 'dec':
-                    $this->userProduct->updateOrDelete($userId, $productId);
-                    header("Location: /catalog");
-
-                    break;
-
-            }
-        }
+        $this->userProduct->updateOrCreate($userId, $productId);
+        header("Location: /catalog");
 
     }
+    public function minus()
+    {
+        SessionService::requireLoggedInUser();
 
+        $errors = self::validate($_POST);
 
+        $userId = $_SESSION['user_id'];
+        $productId = $_POST['product_id'];
+        $action = $_POST['action'];
+
+        $this->userProduct->updateOrDelete($userId, $productId);
+        header("Location: /catalog");
+
+    }
 
     private static function validate(array $data): array
     {

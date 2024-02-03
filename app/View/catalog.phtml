@@ -11,11 +11,16 @@
 
             <p><?php echo $product->getPrice(); ?> ₽</p>
             <div>
-                <form action="/processCart" method="post">
+                <form action="/product-plus" method="post">
 
                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
 
                     <button type="submit" name="action" value="inc">+</button>
+                </form>
+                <form action="/product-minus" method="post">
+
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+
                     <button type="submit" name="action" value="dec">-</button>
                 </form>
             </div>

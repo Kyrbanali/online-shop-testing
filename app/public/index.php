@@ -21,7 +21,9 @@ $app->get('/logout',UserController::class, 'logout');
 $app->get('/catalog',ProductController::class, 'getCatalog');
 $app->get('/cart',ProductController::class, 'getCart');
 
-$app->post('/processCart',ProductController::class, 'processCart');
+$app->post('/product-plus',ProductController::class, 'plus');
+$app->post('/product-minus',ProductController::class, 'minus');
+
 
 
 $app->handleRequest();
