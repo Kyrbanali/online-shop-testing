@@ -4,6 +4,7 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
+use Request\Request;
 use Service\SessionService;
 class ProductController
 {
@@ -39,45 +40,27 @@ class ProductController
 
         require_once './../View/cart.phtml';
     }
-    public function plus()
+    public function plus(Request $request)
     {
         SessionService::requireLoggedInUser();
 
-        $errors = self::validate($_POST);
-
         $userId = $_SESSION['user_id'];
-        $productId = $_POST['product_id'];
-        $action = $_POST['action'];
+        $productId = $request->getOneByKey('product_id');
 
         $this->userProduct->updateOrCreate($userId, $productId);
         header("Location: /catalog");
 
     }
-    public function minus()
+    public function minus(Request $request)
     {
         SessionService::requireLoggedInUser();
 
-        $errors = self::validate($_POST);
-
         $userId = $_SESSION['user_id'];
-        $productId = $_POST['product_id'];
-        $action = $_POST['action'];
+        $productId = $request->getOneByKey('product_id');
 
         $this->userProduct->updateOrDelete($userId, $productId);
         header("Location: /catalog");
 
-    }
-
-    private static function validate(array $data): array
-    {
-        $errors = [];
-
-        if (!isset($data['product_id']))
-        {
-            $errors['product'] = 'product is empty';
-        }
-
-        return $errors;
     }
 
 }

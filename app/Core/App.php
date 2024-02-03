@@ -5,6 +5,7 @@ namespace Core;
 
 use Controller\ProductController;
 use Controller\UserController;
+use Request\Request;
 
 class App
 {
@@ -43,8 +44,10 @@ class App
             if (class_exists($class)) {
                 $obj = new $class();
 
-                if (method_exists($obj, $method)) {
-                    $obj->$method();
+                if (method_exists($obj, $method))
+                {
+                    $request = new Request($_POST);
+                    $obj->$method($request);
                 } else {
                     echo "Метод $method не найден в классе $class";
                 }
@@ -52,7 +55,7 @@ class App
                 echo "Класс $class не найден";
             }
         } else {
-            echo "Маршрут $requestUri с методом $requestMethod не найден";
+            require_once './../View/404.html';
         }
 
     }

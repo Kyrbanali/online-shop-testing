@@ -6,6 +6,13 @@ class User extends Model
     private string $name;
     private string $email;
     private string $password;
+    public function __construct(array $data)
+    {
+        $this->id = $data['id'];
+        $this->name = $data['name'] ;
+        $this->email = $data['email'] ;
+        $this->password = $data['password'];
+    }
     public static function getOneByEmail(string $email)
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
@@ -13,13 +20,7 @@ class User extends Model
 
         $data = $stmt->fetch();
 
-        $obj = new User();
-        $obj->id = $data['id'];
-        $obj->name = $data['name'];
-        $obj->email = $data['email'];
-        $obj->password = $data['password'];
-
-        return $obj;
+        return new User($data);
     }
 
     public static function registrate($name, $email, $password)

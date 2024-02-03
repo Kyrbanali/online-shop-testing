@@ -46,12 +46,23 @@ class Product extends Model
         return $stmt->fetch();
     }
 
-    public function getOne() : mixed
+    public function getOneById($productId) : mixed
     {
-        $sql = 'SELECT * FROM products LIMIT 1';
+        $sql = 'SELECT * FROM products where id = :product_id';
 
-        $stmt = self::getPDO()->query($sql);
-        return $stmt->fetch();
+        $data = ['product_id' => $productId];
+
+        $stmt = self::prepareExecute($sql, $data);
+        $data = $stmt->fetch();
+
+        $obj = new Product();
+        $obj->id = $data['id'];
+        $obj->name = $data['name'];
+        $obj->description = $data['description'];
+        $obj->price = $data['price'];
+        $obj->img_url = $data['img_url'];
+
+        return $obj;
     }
     public function getId(): int
     {
