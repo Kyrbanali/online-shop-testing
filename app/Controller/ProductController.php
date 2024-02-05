@@ -8,22 +8,13 @@ use Request\Request;
 use Service\SessionService;
 class ProductController
 {
-
-    private Product $product;
-    private UserProduct $userProduct;
-
-    public function __construct()
-    {
-        $this->product = new Product();
-        $this->userProduct = new UserProduct();
-    }
     public function getCatalog()
     {
         SessionService::requireLoggedInUser();
         $userId = $_SESSION['user_id'];
 
-        $products = $this->product->getAll();
-        $result = $this->product->getCartQuantity($userId);
+        $products = Product::getAll();
+        $result = Product::getCartQuantity($userId);
 
         require_once './../View/catalog.phtml';
     }
@@ -35,8 +26,8 @@ class ProductController
 
         $userId = $_SESSION['user_id'];
 
-        $products = $this->product->getAllFromCart($userId);
-        $result = $this->product->getCartQuantity($userId);
+        $products = Product::getAllFromCart($userId);
+        $result = Product::getCartQuantity($userId);
 
         require_once './../View/cart.phtml';
     }
@@ -47,7 +38,7 @@ class ProductController
         $userId = $_SESSION['user_id'];
         $productId = $request->getOneByKey('product_id');
 
-        $this->userProduct->updateOrCreate($userId, $productId);
+        UserProduct::updateOrCreate($userId, $productId);
         header("Location: /catalog");
 
     }
@@ -58,7 +49,7 @@ class ProductController
         $userId = $_SESSION['user_id'];
         $productId = $request->getOneByKey('product_id');
 
-        $this->userProduct->updateOrDelete($userId, $productId);
+        UserProduct::updateOrDelete($userId, $productId);
         header("Location: /catalog");
 
     }

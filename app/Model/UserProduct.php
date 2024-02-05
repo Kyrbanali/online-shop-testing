@@ -10,12 +10,10 @@ class UserProduct extends Model
     {
         return $this->id;
     }
-
     public function getUserId(): int
     {
         return $this->user_id;
     }
-
     public function getProductId(): int
     {
         return $this->product_id;
@@ -45,7 +43,7 @@ class UserProduct extends Model
         return $quantity;
 
     }
-    public function updateOrCreate(int $userId, int $productId) : void
+    public static function updateOrCreate(int $userId, int $productId) : void
     {
         $recordExists = self::recordExists($userId, $productId);
 
@@ -68,7 +66,7 @@ class UserProduct extends Model
 
         }
     }
-    public function updateOrDelete(int $userId, int $productId) : void
+    public static function updateOrDelete(int $userId, int $productId) : void
     {
         $recordExists = self::recordExists($userId, $productId);
         $quantity = self::getQuantity($userId, $productId);

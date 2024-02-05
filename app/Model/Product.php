@@ -7,7 +7,16 @@ class Product extends Model
     private string $description;
     private float $price;
     private string $img_url;
-    public function getAll() : array
+
+//    public function __construct(array $data)
+//    {
+//        $this->id = $data['id'];
+//        $this->name = $data['name'];
+//        $this->description = $data['description'];
+//        $this->price = $data['price'];
+//        $this->img_url = $data['img_url'];
+//    }
+    public static function getAll() : array
     {
         $sql = 'SELECT * FROM products';
 
@@ -15,7 +24,7 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public function getAllFromCart($userId) : array
+    public static function getAllFromCart($userId) : array
     {
         $sql = "SELECT products.* FROM products
                 JOIN user_products ON products.id = user_products.product_id
@@ -29,7 +38,7 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public function getCartQuantity($userId)
+    public static function getCartQuantity($userId)
     {
         $sql = "
             SELECT users.name, SUM(user_products.quantity) as total_quantity
@@ -46,7 +55,7 @@ class Product extends Model
         return $stmt->fetch();
     }
 
-    public function getOneById($productId) : mixed
+    public function getOneById($productId) : Product
     {
         $sql = 'SELECT * FROM products where id = :product_id';
 
@@ -55,14 +64,7 @@ class Product extends Model
         $stmt = self::prepareExecute($sql, $data);
         $data = $stmt->fetch();
 
-        $obj = new Product();
-        $obj->id = $data['id'];
-        $obj->name = $data['name'];
-        $obj->description = $data['description'];
-        $obj->price = $data['price'];
-        $obj->img_url = $data['img_url'];
-
-        return $obj;
+        return new Product($data);
     }
     public function getId(): int
     {

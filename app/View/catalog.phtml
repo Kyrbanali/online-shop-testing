@@ -11,23 +11,41 @@
 
             <p><?php echo $product->getPrice(); ?> ₽</p>
             <div>
-                <form action="/product-plus" method="post">
+                <form class="quantity-form" data-action="plus" onsubmit="return false" method="post">
 
                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
 
-                    <button type="submit" name="action" value="inc">+</button>
+                    <button class="quantity-btn" type="submit" value="inc">+</button>
                 </form>
-                <form action="/product-minus" method="post">
+                <form class="quantity-form" data-action="minus" onsubmit="return false" action="/product-minus" method="post">
 
                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
 
-                    <button type="submit" name="action" value="dec">-</button>
+                    <button class="quantity-btn" type="submit" value="dec">-</button>
                 </form>
             </div>
         </div>
     <?php endforeach; ?>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $("document").ready(function() {
+        $('.quantity-form').submit(function() {
+            var action = $(this).data('action');
+
+            $.ajax({
+                type: "POST",
+                url: "/product-" + action,
+                // dataType: 'html',
+                data: $(this).serialize(),
+                success: function() {
+                    console.log('done');
+                }
+            })
+        });
+    });
+</script>
 
 <style>
 

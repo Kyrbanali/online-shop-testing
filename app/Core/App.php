@@ -46,7 +46,7 @@ class App
 
                 if (method_exists($obj, $method))
                 {
-                    $request = new Request($_POST);
+                    $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
                     $obj->$method($request);
                 } else {
                     echo "Метод $method не найден в классе $class";

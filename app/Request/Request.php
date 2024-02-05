@@ -4,18 +4,33 @@ namespace Request;
 
 class Request
 {
+    private string $method;
+    private string $uri;
+    private array $headers;
     private array $body;
-    private array $errors;
 
-    public function __construct(array $body)
+    private array $errors;
+    public function __construct(string $method, string $uri, array $headers = [], array $body = [])
     {
+        $this->method = $method;
+        $this->uri = $uri;
+        $this->headers = $headers;
         $this->body = $body;
         $this->validate();
 
     }
+
+
     private function validate()
     {
         $this->errors = [];
+
+        $fields = [
+            'name' => ['min-length' => 2, 'no-numbers' => true],
+            'email' => ['min-length' => 2, 'contains-at' => true],
+            'psw' => ['min-length' => 4],
+            'psw-repeat' => ['min-length' => 4],
+        ];
 
         foreach ($this->body as $key => $value)
         {
@@ -64,20 +79,35 @@ class Request
             $this->errors[$fieldName] = "{$fieldName} mismatch";
         }
     }
-    public function getOneByKey($key)
+    public function getOneByKey(string $key)
     {
         return $this->has($key)? $this->body[$key] : null;
 
     }
-    public function has($key)
+    public function has(string $key) : bool
     {
         return isset($this->body[$key]);
     }
-    public function getErrors()
+    public function getErrors() : array
     {
         return $this->errors;
     }
-    public function getAll()
+    public function getMethod() : string
+    {
+        return $this->method;
+    }
+
+    public function getUri(): string
+    {
+        return $this->uri;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function getBody() : array
     {
         return $this->body;
     }
