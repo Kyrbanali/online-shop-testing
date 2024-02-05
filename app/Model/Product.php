@@ -24,7 +24,7 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public static function getAllFromCart($userId) : array
+    public static function getAllFromCart(int $userId) : array
     {
         $sql = "SELECT products.* FROM products
                 JOIN user_products ON products.id = user_products.product_id
@@ -38,10 +38,10 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public static function getCartQuantity($userId)
+    public static function getCartQuantity(int $userId) : int | null
     {
         $sql = "
-            SELECT users.name, SUM(user_products.quantity) as total_quantity
+            SELECT SUM(user_products.quantity) as total_quantity
             FROM users
             JOIN user_products ON users.id = user_products.user_id
             WHERE users.id = :user_id
@@ -52,19 +52,20 @@ class Product extends Model
 
         $stmt = self::prepareExecute($sql, $data);
 
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+        return $result['total_quantity'];
     }
 
-    public function getOneById($productId) : Product
+    public function getOneById(int $productId) : Product
     {
         $sql = 'SELECT * FROM products where id = :product_id';
 
         $data = ['product_id' => $productId];
 
         $stmt = self::prepareExecute($sql, $data);
-        $data = $stmt->fetch();
+        $result = $stmt->fetch();
 
-        return new Product($data);
+        return new Product($result);
     }
     public function getId(): int
     {
@@ -89,6 +90,18 @@ class Product extends Model
     public function getImgUrl(): string
     {
         return $this->img_url;
+    }
+
+    public function getQuantity(int $userId) : int
+    {
+        $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
+
+        $data = ['user_id' => $userId, 'product_id' => $this->id];
+        $stmt = self::prepareExecute($sql, $data);
+
+        $result = $stmt->fetch();
+        return $result['quantity'];
+
     }
 
 

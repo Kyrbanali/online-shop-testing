@@ -14,8 +14,8 @@ if (session_status() !== PHP_SESSION_ACTIVE)
         <?php if (isset($_SESSION['user_id'])): ?>
             <div id="cart-container">
                 <a href="/cart">Корзина</a>
-                <span id="cart-count"><?php if (isset($result['total_quantity'])): ?>
-                        <?php print_r($result['total_quantity']) ?>
+                <span id="cart-count"><?php if (isset($cartQuantity)): ?>
+                        <?php print_r($cartQuantity) ?>
                     <?php endif; ?></span>
             </div>
             <li><a href="/logout">Выйти</a></li>

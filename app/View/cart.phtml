@@ -7,15 +7,65 @@
 
             <h1><?php echo $product->getName(); ?></h1>
 
-            <h2><?php echo $product->getDescription(); ?></h2>
+            <h2>Описание: <?php echo $product->getDescription(); ?></h2>
 
-            <p><?php echo $product->getPrice(); ?> ₽</p>
+            <p>Стоимость: <?php echo $product->getPrice(); ?> ₽</p>
 
+            <p>Количичество: <span class="quantity-display"><?php echo $product->getQuantity($_SESSION['user_id']); ?></span> </p>
+
+            <div>
+                <form class="quantity-form" data-action="plus" onsubmit="return false" method="post">
+
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+
+                    <button class="quantity-btn" type="submit" value="inc">+</button>
+                </form>
+                <form class="quantity-form" data-action="minus" onsubmit="return false" action="/product-minus" method="post">
+
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+
+                    <button class="quantity-btn" type="submit" value="dec">-</button>
+                </form>
+            </div>
 
         </div>
     <?php endforeach; ?>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $("document").ready(function() {
+        $('.quantity-form').submit(function() {
+            var action = $(this).data('action');
+            var quantityDisplay = $(this).closest('.product').find('.quantity-display');
+
+            $.ajax({
+                type: "POST",
+                url: "/product-" + action,
+                // dataType: 'html',
+                data: $(this).serialize(),
+                success: function() {
+                    console.log('done');
+                    updateQuantityDisplay(quantityDisplay, action);
+                }
+            })
+        });
+        function updateQuantityDisplay(displayElement, action) {
+            // Получаем текущее значение количества из интерфейса
+            var currentQuantity = parseInt(displayElement.text());
+
+            if (action === 'plus') {
+                currentQuantity++;
+            } else if (action === 'minus') {
+                currentQuantity--;
+            }
+
+            // Устанавливаем новое значение в интерфейсе
+            displayElement.text(currentQuantity);
+        }
+    });
+
+</script>
 
 <style>
 
