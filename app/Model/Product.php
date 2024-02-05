@@ -7,15 +7,6 @@ class Product extends Model
     private string $description;
     private float $price;
     private string $img_url;
-
-//    public function __construct(array $data)
-//    {
-//        $this->id = $data['id'];
-//        $this->name = $data['name'];
-//        $this->description = $data['description'];
-//        $this->price = $data['price'];
-//        $this->img_url = $data['img_url'];
-//    }
     public static function getAll() : array
     {
         $sql = 'SELECT * FROM products';
@@ -26,10 +17,12 @@ class Product extends Model
 
     public static function getAllByUserId(int $userId) : array
     {
-        $sql = "SELECT products.* FROM products
+        $sql = <<<SQL
+                SELECT products.* FROM products
                 JOIN user_products ON products.id = user_products.product_id
                 JOIN users ON user_products.user_id = users.id
-                WHERE users.id = :user_id;";
+                WHERE users.id = :user_id;
+                SQL;
 
 
         $data = ['user_id' => $userId];
@@ -40,13 +33,13 @@ class Product extends Model
 
     public static function getCartQuantity(int $userId) : int | null
     {
-        $sql = "
+        $sql = <<<SQL
             SELECT SUM(user_products.quantity) as total_quantity
             FROM users
             JOIN user_products ON users.id = user_products.user_id
             WHERE users.id = :user_id
             GROUP BY users.id;
-        ";
+        SQL;
 
         $data = ['user_id' => $userId];
 
@@ -56,7 +49,7 @@ class Product extends Model
         return $result['total_quantity'] ?? null;
     }
 
-    public function getOneById(int $productId) : Product
+    public function getOneById(int $productId)
     {
         $sql = 'SELECT * FROM products where id = :product_id';
 
@@ -64,8 +57,6 @@ class Product extends Model
 
         $stmt = self::prepareExecute($sql, $data);
         $result = $stmt->fetch();
-
-        return new Product($result);
     }
     public function getId(): int
     {
