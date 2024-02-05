@@ -53,7 +53,7 @@ class Product extends Model
         $stmt = self::prepareExecute($sql, $data);
 
         $result = $stmt->fetch();
-        return $result['total_quantity'];
+        return $result['total_quantity'] ?? null;
     }
 
     public function getOneById(int $productId) : Product
