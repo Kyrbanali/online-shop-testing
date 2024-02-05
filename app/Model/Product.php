@@ -24,7 +24,7 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public static function getAllFromCart(int $userId) : array
+    public static function getAllByUserId(int $userId) : array
     {
         $sql = "SELECT products.* FROM products
                 JOIN user_products ON products.id = user_products.product_id
