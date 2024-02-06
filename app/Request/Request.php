@@ -8,7 +8,6 @@ class Request
     private string $uri;
     private array $headers;
     private array $body;
-
     private array $errors;
     public function __construct(string $method, string $uri, array $headers = [], array $body = [])
     {
@@ -19,8 +18,6 @@ class Request
         $this->validate();
 
     }
-
-
     private function validate()
     {
         $this->errors = [];

@@ -53,15 +53,20 @@
         function updateQuantityDisplay(displayElement, action) {
             // Получаем текущее значение количества из интерфейса
             var currentQuantity = parseInt(displayElement.text());
-
-            if (action === 'plus') {
-                currentQuantity++;
-            } else if (action === 'minus') {
-                currentQuantity--;
+            if (currentQuantity > 0) {
+                if (action === 'plus') {
+                    currentQuantity++;
+                } else if (action === 'minus') {
+                    currentQuantity--;
+                }
             }
 
             // Устанавливаем новое значение в интерфейсе
             displayElement.text(currentQuantity);
+
+            if (currentQuantity < 1) {
+                displayElement.closest('.product').remove();
+            }
         }
     });
 

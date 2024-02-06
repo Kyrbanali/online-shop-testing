@@ -14,9 +14,13 @@ class ProductController
         $userId = $_SESSION['user_id'];
 
         $products = Product::getAll();
-        $cartQuantity = Product::getCartQuantity($userId);
+        $cartQuantity = self::getCartQuantity($userId);
 
         require_once './../View/catalog.phtml';
+    }
+    public static function getCartQuantity($userId) : int|null
+    {
+        return Product::getCartQuantity($userId);
     }
 
     public function getCart()
@@ -27,7 +31,7 @@ class ProductController
         $userId = $_SESSION['user_id'];
 
         $products = Product::getAllByUserId($userId);
-        $cartQuantity = Product::getCartQuantity($userId);
+        $cartQuantity = self::getCartQuantity($userId);
 
         require_once './../View/cart.phtml';
     }

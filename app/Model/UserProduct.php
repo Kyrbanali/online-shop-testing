@@ -5,7 +5,13 @@ class UserProduct extends Model
     private int $id;
     private int $user_id;
     private int $product_id;
+    private int $quantity;
 
+    public function setQuantity(int $quantity) : void
+    {
+        $this->quantity = $quantity;
+
+    }
     public function getId(): int
     {
         return $this->id;
@@ -17,6 +23,18 @@ class UserProduct extends Model
     public function getProductId(): int
     {
         return $this->product_id;
+    }
+    public function save(int $quantity, int $userId, int $productId)
+    {
+        $sql = <<<SQL
+                UPDATE user_products
+                SET quantity = :quantity
+                WHERE product_id = :product_id AND user_id = :user_id;
+        SQL;
+
+        $data = ['quantity' => $quantity, 'user_id' => $userId, 'product_id' => $productId];
+
+        self::prepareExecute($sql, $data);
     }
     public static function recordExists(int $userId, int $productId) : bool
     {

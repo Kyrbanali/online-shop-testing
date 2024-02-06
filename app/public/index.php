@@ -20,6 +20,8 @@ $app->post('/login',UserController::class, 'postLogin');
 $app->get('/logout',UserController::class, 'logout');
 $app->get('/catalog',ProductController::class, 'getCatalog');
 $app->get('/cart',ProductController::class, 'getCart');
+$app->get('/cartQuantity',ProductController::class, 'getCartQuantity');
+
 
 $app->post('/product-plus',ProductController::class, 'plus');
 $app->post('/product-minus',ProductController::class, 'minus');
