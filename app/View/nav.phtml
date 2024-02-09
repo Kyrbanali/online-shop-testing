@@ -23,22 +23,6 @@ $session->startSession();
     </ul>
 </nav>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function() {
-        function updateCartCount() {
-            $.ajax({
-                type: "GET",
-                url: "/cartQuantity",
-                success: function(data) {
-                    // Обновляем отображение количества в корзине
-                    $('#cart-count').text(data);
-                }
-            });
-        }
-    });
-</script>
-
 <style>
     nav {
         background-color: #f2f2f2;

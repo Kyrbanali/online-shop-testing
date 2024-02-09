@@ -26,44 +26,6 @@ class ProductController
 
         require_once './../View/catalog.phtml';
     }
-    public function getCart()
-    {
-        $user = $this->authenticationService->getCurrentUser();
-        if (!$user) {
-            header("Location: /login");
-        }
-        $userId = $user->getId();
 
-        $products = Product::getAllByUserId($userId);
-        $cartQuantity = UserProduct::getCartQuantity($userId);;
-
-        require_once './../View/cart.phtml';
-    }
-    public function plus(Request $request)
-    {
-        $user = $this->authenticationService->getCurrentUser();
-        if (!$user) {
-            header("Location: /login");
-        }
-        $userId = $user->getId();
-        $productId = $request->getOneByKey('product_id');
-
-        UserProduct::updateOrCreate($userId, $productId);
-        header("Location: /catalog");
-
-    }
-    public function minus(Request $request)
-    {
-        $user = $this->authenticationService->getCurrentUser();
-        if (!$user) {
-            header("Location: /login");
-        }
-        $userId = $user->getId();
-        $productId = $request->getOneByKey('product_id');
-
-        UserProduct::updateOrDelete($userId, $productId);
-        header("Location: /catalog");
-
-    }
 
 }

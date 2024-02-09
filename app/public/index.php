@@ -4,6 +4,7 @@ use Core\App;
 use Core\Autoloader;
 use Controller\ProductController;
 use Controller\UserController;
+use Controller\CartController;
 
 require_once './../Core/Autoloader.php';
 
@@ -19,12 +20,11 @@ $app->post('/login',UserController::class, 'postLogin');
 
 $app->get('/logout',UserController::class, 'logout');
 $app->get('/catalog',ProductController::class, 'getCatalog');
-$app->get('/cart',ProductController::class, 'getCart');
-$app->get('/cartQuantity',ProductController::class, 'getCartQuantity');
+$app->get('/cart',CartController::class, 'getCart');
 
 
-$app->post('/product-plus',ProductController::class, 'plus');
-$app->post('/product-minus',ProductController::class, 'minus');
+$app->post('/product-plus',CartController::class, 'plus');
+$app->post('/product-minus',CartController::class, 'minus');
 
 
 
