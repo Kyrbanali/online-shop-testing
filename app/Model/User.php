@@ -13,30 +13,37 @@ class User extends Model
         $this->email = $data['email'] ;
         $this->password = $data['password'];
     }
-    public static function getOneByEmail(string $email)
+    public static function getOneByEmail(string $email): ?User
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
         $stmt->execute(['email' => $email]);
 
         $data = $stmt->fetch();
+        if (empty($data)) {
+            return null;
+        }
+
+        return new User($data);
+    }
+    public static function getOneById(string $id): ?User
+    {
+        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+
+        $data = $stmt->fetch();
+        if (empty($data)) {
+            return null;
+        }
 
         return new User($data);
     }
 
     public static function registrate($name, $email, $password)
     {
-        $hash = self::hashPassword($password);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = self::getPDO()->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :hash)');
         $stmt->execute(['name' => $name, 'email' => $email, 'hash' => $hash]);
-    }
-    private static function hashPassword(string $password) : string
-    {
-        return password_hash($password, PASSWORD_DEFAULT);
-    }
-    public static function verifyPassword($password, $hashPassword) : bool
-    {
-        return password_verify($password, $hashPassword);
     }
 
     public function getId(): int

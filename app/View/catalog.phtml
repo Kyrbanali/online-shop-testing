@@ -10,7 +10,7 @@
             <h2><?php echo $product->getDescription(); ?></h2>
 
             <p><?php echo $product->getPrice(); ?> ₽</p>
-            <div>
+            <div class="plus-minus">
                 <form class="quantity-form" data-action="plus" onsubmit="return false" method="post">
 
                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
@@ -48,7 +48,6 @@
 </script>
 
 <style>
-
     a {
         &:hover{
             border-bottom: 3px red solid ;

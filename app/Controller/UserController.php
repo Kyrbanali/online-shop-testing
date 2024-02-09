@@ -4,12 +4,13 @@ namespace Controller;
 
 use Model\User;
 use Request\Request;
-use Service\SessionService;
+use Service\SessionAuthenticationService;
 class UserController
 {
-    public function getRegistrate()
+    private SessionAuthenticationService $authenticationService;
+    public function __construct()
     {
-        require_once './../View/get_registrate.phtml';
+        $this->authenticationService = new SessionAuthenticationService();
     }
     public function getLogin()
     {
@@ -23,22 +24,19 @@ class UserController
             $email = $request->getOneByKey('email');
             $password = $request->getOneByKey('psw');
 
-            $user = User::getOneByEmail($email);
+            $result = $this->authenticationService->login($email, $password);
 
-            if (!$user)
-            {
-                $errors['user'] = 'Пользователь с такими данными не зарегистрирован';
-            }
-            else
-            {
-                if (User::verifyPassword($password, $user->getPassword()))
-                {
-                    SessionService::setUser($user->getId());
-                }
-                $errors['psw'] = 'wrong password';
+            if ($result) {
+                header("Location: /catalog");
+            } else {
+                $errors['user'] = "Пользователь с такими данными не зарегистрирован";
             }
         }
         require_once('./../View/get_login.phtml');
+    }
+    public function getRegistrate()
+    {
+        require_once './../View/get_registrate.phtml';
     }
     public function postRegistrate(Request $request)
     {
@@ -59,7 +57,7 @@ class UserController
     }
     public function logout()
     {
-        SessionService::logout();
+        $this->authenticationService->logout();
         header('Location: /login');
     }
 

@@ -1,6 +1,7 @@
 <?php
-use Service\SessionService;
-SessionService::startSession();
+use Service\SessionAuthenticationService;
+$session = new SessionAuthenticationService();
+$session->startSession();
 ?>
 
 

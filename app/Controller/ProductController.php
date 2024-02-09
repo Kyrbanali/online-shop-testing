@@ -5,13 +5,21 @@ namespace Controller;
 use Model\Product;
 use Model\UserProduct;
 use Request\Request;
-use Service\SessionService;
+use Service\SessionAuthenticationService;
 class ProductController
 {
+    private SessionAuthenticationService $authenticationService;
+    public function __construct()
+    {
+        $this->authenticationService = new SessionAuthenticationService();
+    }
     public function getCatalog()
     {
-        SessionService::requireLoggedInUser();
-        $userId = $_SESSION['user_id'];
+        $user = $this->authenticationService->getCurrentUser();
+        if (!$user) {
+            header("Location: /login");
+        }
+        $userId = $user->getId();
 
         $products = Product::getAll();
         $cartQuantity = self::getCartQuantity($userId);
@@ -26,9 +34,11 @@ class ProductController
     public function getCart()
     {
 
-        SessionService::requireLoggedInUser();
-
-        $userId = $_SESSION['user_id'];
+        $user = $this->authenticationService->getCurrentUser();
+        if (!$user) {
+            header("Location: /login");
+        }
+        $userId = $user->getId();
 
         $products = Product::getAllByUserId($userId);
         $cartQuantity = self::getCartQuantity($userId);
@@ -37,9 +47,11 @@ class ProductController
     }
     public function plus(Request $request)
     {
-        SessionService::requireLoggedInUser();
-
-        $userId = $_SESSION['user_id'];
+        $user = $this->authenticationService->getCurrentUser();
+        if (!$user) {
+            header("Location: /login");
+        }
+        $userId = $user->getId();
         $productId = $request->getOneByKey('product_id');
 
         UserProduct::updateOrCreate($userId, $productId);
@@ -48,9 +60,11 @@ class ProductController
     }
     public function minus(Request $request)
     {
-        SessionService::requireLoggedInUser();
-
-        $userId = $_SESSION['user_id'];
+        $user = $this->authenticationService->getCurrentUser();
+        if (!$user) {
+            header("Location: /login");
+        }
+        $userId = $user->getId();
         $productId = $request->getOneByKey('product_id');
 
         UserProduct::updateOrDelete($userId, $productId);
