@@ -24,6 +24,23 @@ class UserProduct extends Model
     {
         return $this->product_id;
     }
+    public static function getCartQuantity(int $userId) : int | null
+    {
+        $sql = <<<SQL
+            SELECT SUM(user_products.quantity) as total_quantity
+            FROM users
+            JOIN user_products ON users.id = user_products.user_id
+            WHERE users.id = :user_id
+            GROUP BY users.id;
+        SQL;
+
+        $data = ['user_id' => $userId];
+
+        $stmt = self::prepareExecute($sql, $data);
+
+        $result = $stmt->fetch();
+        return $result['total_quantity'] ?? null;
+    }
     public function save(int $quantity, int $userId, int $productId)
     {
         $sql = <<<SQL
@@ -35,31 +52,6 @@ class UserProduct extends Model
         $data = ['quantity' => $quantity, 'user_id' => $userId, 'product_id' => $productId];
 
         self::prepareExecute($sql, $data);
-    }
-    public static function recordExists(int $userId, int $productId) : bool
-    {
-        $sql = "SELECT COUNT(*) FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-
-        $data = ['user_id' => $userId, 'product_id' => $productId];
-
-        $stmt = self::prepareExecute($sql, $data);
-        $count = $stmt->fetchColumn();
-
-        return $count > 0;
-    }
-    public static function getQuantity(int $userId, int $productId)
-    {
-        $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-
-
-        $data = ['user_id' => $userId, 'product_id' => $productId];
-
-        $stmt = self::prepareExecute($sql, $data);
-
-        $quantity = $stmt->fetchColumn();
-
-        return $quantity;
-
     }
     public static function updateOrCreate(int $userId, int $productId) : void
     {
@@ -113,5 +105,30 @@ class UserProduct extends Model
         {
             //здесь типа обработка удаления пустоты может быть, но вряд ли
         }
+    }
+    public static function getQuantity(int $userId, int $productId)
+    {
+        $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
+
+
+        $data = ['user_id' => $userId, 'product_id' => $productId];
+
+        $stmt = self::prepareExecute($sql, $data);
+
+        $quantity = $stmt->fetchColumn();
+
+        return $quantity;
+
+    }
+    public static function recordExists(int $userId, int $productId) : bool
+    {
+        $sql = "SELECT COUNT(*) FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
+
+        $data = ['user_id' => $userId, 'product_id' => $productId];
+
+        $stmt = self::prepareExecute($sql, $data);
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
     }
 }

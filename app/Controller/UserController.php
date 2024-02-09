@@ -47,7 +47,7 @@ class UserController
             $email = $request->getOneByKey('email');
             $password = $request->getOneByKey('psw');
 
-            User::registrate($name, $email, $password);
+            User::create($name, $email, $password);
 
 
             header('Location: /login');

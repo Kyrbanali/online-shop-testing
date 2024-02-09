@@ -38,7 +38,7 @@ class User extends Model
         return new User($data);
     }
 
-    public static function registrate($name, $email, $password)
+    public static function create($name, $email, $password): void
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
 

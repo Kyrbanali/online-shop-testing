@@ -31,24 +31,6 @@ class Product extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
 
-    public static function getCartQuantity(int $userId) : int | null
-    {
-        $sql = <<<SQL
-            SELECT SUM(user_products.quantity) as total_quantity
-            FROM users
-            JOIN user_products ON users.id = user_products.user_id
-            WHERE users.id = :user_id
-            GROUP BY users.id;
-        SQL;
-
-        $data = ['user_id' => $userId];
-
-        $stmt = self::prepareExecute($sql, $data);
-
-        $result = $stmt->fetch();
-        return $result['total_quantity'] ?? null;
-    }
-
     public function getOneById(int $productId)
     {
         $sql = 'SELECT * FROM products where id = :product_id';

@@ -22,18 +22,12 @@ class ProductController
         $userId = $user->getId();
 
         $products = Product::getAll();
-        $cartQuantity = self::getCartQuantity($userId);
+        $cartQuantity = UserProduct::getCartQuantity($userId);;
 
         require_once './../View/catalog.phtml';
     }
-    public static function getCartQuantity($userId) : int|null
-    {
-        return Product::getCartQuantity($userId);
-    }
-
     public function getCart()
     {
-
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
             header("Location: /login");
@@ -41,7 +35,7 @@ class ProductController
         $userId = $user->getId();
 
         $products = Product::getAllByUserId($userId);
-        $cartQuantity = self::getCartQuantity($userId);
+        $cartQuantity = UserProduct::getCartQuantity($userId);;
 
         require_once './../View/cart.phtml';
     }
