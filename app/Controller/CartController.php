@@ -37,10 +37,14 @@ class CartController
             header("Location: /login");
         }
         $userId = $user->getId();
-        $productId = $request->getId();
+        $errors = $request->validate();
+        if (empty($errors)) {
 
-        UserProduct::updateOrCreate($userId, $productId);
-        header("Location: /catalog");
+            $productId = $request->getId();
+
+            UserProduct::updateOrCreate($userId, $productId);
+            header("Location: /catalog");
+        }
 
     }
     public function minus(MinusRequest $request)
@@ -50,10 +54,14 @@ class CartController
             header("Location: /login");
         }
         $userId = $user->getId();
-        $productId = $request->getId();
+        $errors = $request->validate();
+        if (empty($errors)) {
 
-        UserProduct::updateOrDelete($userId, $productId);
-        header("Location: /catalog");
+            $productId = $request->getId();
+
+            UserProduct::updateOrDelete($userId, $productId);
+            header("Location: /catalog");
+        }
     }
 
 }

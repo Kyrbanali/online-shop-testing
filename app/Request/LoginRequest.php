@@ -23,14 +23,10 @@ class LoginRequest extends Request
     {
         $errors = [];
 
-        if (isset($this->body['email'])) {
-            $email = $this->body['email'];
-        } else {
+        if (!isset($this->body['email'])) {
             $errors['email'] = 'Поле email не указано';
         }
-        if (isset($this->body['psw'])) {
-            $password = $this->body['psw'];
-        } else {
+        if (!isset($this->body['psw'])) {
             $errors['psw'] = 'Поле password не указано';
         }
 
