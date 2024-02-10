@@ -4,7 +4,6 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
-use Request\Request;
 use Service\SessionAuthenticationService;
 class ProductController
 {

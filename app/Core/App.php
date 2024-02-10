@@ -15,18 +15,20 @@ class App
     {
         return $this->routes;
     }
-    public function get(string $route, string $class, string $methodName) : void
+    public function get(string $route, string $class, string $methodName, string $request = null) : void
     {
         $this->routes[$route]['GET'] = [
             'class' => $class,
             'method' => $methodName,
+            'request' => $request,
         ];
     }
-    public function post(string $route, string $class, string $methodName) : void
+    public function post(string $route, string $class, string $methodName, string $request = null) : void
     {
         $this->routes[$route]['POST'] = [
             'class' => $class,
             'method' => $methodName,
+            'request' => $request,
         ];
 
     }
@@ -40,13 +42,18 @@ class App
             $route = $this->routes[$requestUri][$requestMethod];
             $class = $route['class'];
             $method = $route['method'];
+            $request = $route['request'];
 
             if (class_exists($class)) {
                 $obj = new $class();
 
                 if (method_exists($obj, $method))
                 {
-                    $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
+                    if (isset($request)) {
+                        $request = new $route['request']($requestMethod, $requestUri, headers_list(), $_REQUEST);
+                    } else {
+                        $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
+                    }
                     $obj->$method($request);
                 } else {
                     echo "Метод $method не найден в классе $class";

@@ -3,7 +3,8 @@
 namespace Controller;
 
 use Model\User;
-use Request\Request;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
 use Service\SessionAuthenticationService;
 class UserController
 {
@@ -12,17 +13,13 @@ class UserController
     {
         $this->authenticationService = new SessionAuthenticationService();
     }
-    public function getLogin()
+    public function postLogin(LoginRequest $request)
     {
-        require_once './../View/get_login.phtml';
-    }
-    public function postLogin(Request $request)
-    {
-        $errors = $request->getErrors();
+        $errors = $request->validate();
         if (empty($errors))
         {
-            $email = $request->getOneByKey('email');
-            $password = $request->getOneByKey('psw');
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $result = $this->authenticationService->login($email, $password);
 
@@ -34,18 +31,23 @@ class UserController
         }
         require_once('./../View/get_login.phtml');
     }
-    public function getRegistrate()
+    public function getLogin()
     {
-        require_once './../View/get_registrate.phtml';
+        require_once './../View/get_login.phtml';
     }
-    public function postRegistrate(Request $request)
+    public function logout()
     {
-        $errors = $request->getErrors();
+        $this->authenticationService->logout();
+        header('Location: /login');
+    }
+    public function postRegistrate(RegistrateRequest $request)
+    {
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $name = $request->getOneByKey('name');
-            $email = $request->getOneByKey('email');
-            $password = $request->getOneByKey('psw');
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             User::create($name, $email, $password);
 
@@ -55,10 +57,9 @@ class UserController
         }
         require_once './../View/get_registrate.phtml';
     }
-    public function logout()
+    public function getRegistrate()
     {
-        $this->authenticationService->logout();
-        header('Location: /login');
+        require_once './../View/get_registrate.phtml';
     }
 
 }

@@ -4,6 +4,8 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
+use Request\MinusRequest;
+use Request\PlusRequest;
 use Request\Request;
 use Service\SessionAuthenticationService;
 
@@ -28,27 +30,27 @@ class CartController
 
         require_once './../View/cart.phtml';
     }
-    public function plus(Request $request)
+    public function plus(PlusRequest $request)
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
             header("Location: /login");
         }
         $userId = $user->getId();
-        $productId = $request->getOneByKey('product_id');
+        $productId = $request->getId();
 
         UserProduct::updateOrCreate($userId, $productId);
         header("Location: /catalog");
 
     }
-    public function minus(Request $request)
+    public function minus(MinusRequest $request)
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
             header("Location: /login");
         }
         $userId = $user->getId();
-        $productId = $request->getOneByKey('product_id');
+        $productId = $request->getId();
 
         UserProduct::updateOrDelete($userId, $productId);
         header("Location: /catalog");
