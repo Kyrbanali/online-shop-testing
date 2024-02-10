@@ -25,7 +25,17 @@ class CartController
         }
         $userId = $user->getId();
 
-        $products = Product::getAllByUserId($userId);
+        $userProducts = UserProduct::getCart($userId);
+
+        if (!empty($userProducts)) {
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct->getProductId();
+            }
+
+            if (!empty($productIds)) {
+                $products = Product::getAllByIds($productIds);
+            }
+        }
         $cartQuantity = UserProduct::getCartQuantity($userId);;
 
         require_once './../View/cart.phtml';

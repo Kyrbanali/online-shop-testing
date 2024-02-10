@@ -7,28 +7,50 @@ class Product extends Model
     private string $description;
     private float $price;
     private string $img_url;
-    public static function getAll() : array
+    public function __construct(int $id, string $name, string $description, float $price, string $img_url)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->description = $description;
+        $this->price = $price;
+        $this->img_url = $img_url;
+
+    }
+    public static function getAll() : ?array
     {
         $sql = 'SELECT * FROM products';
 
         $stmt = self::getPDO()->query($sql);
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+        $products = $stmt->fetchAll();
+
+        foreach ($products as $product) {
+            $data[] = new Product($product['id'], $product['name'], $product['description'], $product['price'], $product['img_url']);
+        }
+
+        if (empty($data)) {
+            return null;
+        }
+        return $data;
     }
 
-    public static function getAllByUserId(int $userId) : array
+    public static function getAllByIds(array $productIds) : ?array
     {
+        $string = implode(", ", $productIds);
         $sql = <<<SQL
-                SELECT products.* FROM products
-                JOIN user_products ON products.id = user_products.product_id
-                JOIN users ON user_products.user_id = users.id
-                WHERE users.id = :user_id;
+                SELECT * FROM products WHERE id IN ($string)
                 SQL;
+        $stmt = self::getPdo()->query($sql);
+        $products = $stmt->fetchAll();
 
+        foreach ($products as $product) {
+            $data[$product['id']] = new Product($product['id'], $product['name'], $product['description'], $product['price'], $product['img_url']);
+        }
 
-        $data = ['user_id' => $userId];
+        if (empty($data)) {
+            return null;
+        }
 
-        $stmt = self::prepareExecute($sql, $data);
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+        return $data;
     }
 
     public function getOneById(int $productId)

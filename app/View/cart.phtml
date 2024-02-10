@@ -1,7 +1,11 @@
 <?php require_once './../View/nav.phtml'; ?>
 
 <div class="products">
-    <?php foreach ($products as $product): ?>
+    <?php if (empty($userProducts)) { ?>
+    <h2>Cart is empty</h2>
+    <?php } else {
+    foreach ($userProducts as $userProduct):
+    $product = $products[$userProduct->getProductId()]; ?>
         <div class="product">
             <img src="<?php echo $product->getImgUrl(); ?>">
 
@@ -29,7 +33,7 @@
             </div>
 
         </div>
-    <?php endforeach; ?>
+    <?php endforeach; } ?>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

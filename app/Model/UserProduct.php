@@ -24,7 +24,20 @@ class UserProduct extends Model
     {
         return $this->product_id;
     }
-    public static function getCartQuantity(int $userId) : int | null
+    public static function getCart(int $userId): ?array
+    {
+        $sql = <<<SQL
+            SELECT * 
+            FROM user_products
+            WHERE user_id = :user_id
+        SQL;
+
+        $data = ['user_id' => $userId];
+
+        $stmt = self::prepareExecute($sql, $data);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+    }
+    public static function getCartQuantity(int $userId) : ?int
     {
         $sql = <<<SQL
             SELECT SUM(user_products.quantity) as total_quantity
