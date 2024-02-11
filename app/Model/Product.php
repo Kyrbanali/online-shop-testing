@@ -7,6 +7,7 @@ class Product extends Model
     private string $description;
     private float $price;
     private string $img_url;
+
     public function __construct(int $id, string $name, string $description, float $price, string $img_url)
     {
         $this->id = $id;
@@ -16,6 +17,7 @@ class Product extends Model
         $this->img_url = $img_url;
 
     }
+
     public static function getAll() : ?array
     {
         $sql = 'SELECT * FROM products';
@@ -62,6 +64,7 @@ class Product extends Model
         $stmt = self::prepareExecute($sql, $data);
         $result = $stmt->fetch();
     }
+
     public function getId(): int
     {
         return $this->id;

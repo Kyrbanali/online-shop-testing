@@ -8,6 +8,7 @@ class MinusRequest extends Request
     {
         return $this->body['product_id'];
     }
+
     public function validate(): array
     {
         $errors = [];

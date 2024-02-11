@@ -12,18 +12,22 @@ class UserProduct extends Model
         $this->quantity = $quantity;
 
     }
+
     public function getId(): int
     {
         return $this->id;
     }
+
     public function getUserId(): int
     {
         return $this->user_id;
     }
+
     public function getProductId(): int
     {
         return $this->product_id;
     }
+
     public static function getCart(int $userId): ?array
     {
         $sql = <<<SQL
@@ -37,6 +41,7 @@ class UserProduct extends Model
         $stmt = self::prepareExecute($sql, $data);
         return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
     }
+
     public static function getCartQuantity(int $userId) : ?int
     {
         $sql = <<<SQL
@@ -54,6 +59,7 @@ class UserProduct extends Model
         $result = $stmt->fetch();
         return $result['total_quantity'] ?? null;
     }
+
     public function save(int $quantity, int $userId, int $productId)
     {
         $sql = <<<SQL
@@ -66,6 +72,7 @@ class UserProduct extends Model
 
         self::prepareExecute($sql, $data);
     }
+
     public static function updateOrCreate(int $userId, int $productId) : void
     {
         $recordExists = self::recordExists($userId, $productId);
@@ -89,6 +96,7 @@ class UserProduct extends Model
 
         }
     }
+
     public static function updateOrDelete(int $userId, int $productId) : void
     {
         $recordExists = self::recordExists($userId, $productId);
@@ -119,6 +127,7 @@ class UserProduct extends Model
             //здесь типа обработка удаления пустоты может быть, но вряд ли
         }
     }
+
     public static function getQuantity(int $userId, int $productId)
     {
         $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
@@ -133,6 +142,7 @@ class UserProduct extends Model
         return $quantity;
 
     }
+
     public static function recordExists(int $userId, int $productId) : bool
     {
         $sql = "SELECT COUNT(*) FROM user_products WHERE user_id = :user_id AND product_id = :product_id";

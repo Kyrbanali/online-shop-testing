@@ -12,6 +12,7 @@ use Service\SessionAuthenticationService;
 class CartController
 {
     private SessionAuthenticationService $authenticationService;
+
     public function __construct()
     {
         $this->authenticationService = new SessionAuthenticationService();
@@ -40,6 +41,7 @@ class CartController
 
         require_once './../View/cart.phtml';
     }
+
     public function plus(PlusRequest $request)
     {
         $user = $this->authenticationService->getCurrentUser();
@@ -57,6 +59,7 @@ class CartController
         }
 
     }
+
     public function minus(MinusRequest $request)
     {
         $user = $this->authenticationService->getCurrentUser();

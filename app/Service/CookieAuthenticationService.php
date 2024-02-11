@@ -23,6 +23,7 @@ class CookieAuthenticationService implements AuthenticationInterface
         return true;
 
     }
+
     public function getCurrentUser(): ?User
     {
         if (!$this->check()) {
@@ -34,6 +35,7 @@ class CookieAuthenticationService implements AuthenticationInterface
         return User::getOneById($userId);
 
     }
+
     public function logout(): void
     {
         if ($this->check()) {
@@ -41,6 +43,7 @@ class CookieAuthenticationService implements AuthenticationInterface
         }
 
     }
+
     public function check(): bool
     {
         return isset($_COOKIE['user_id']);

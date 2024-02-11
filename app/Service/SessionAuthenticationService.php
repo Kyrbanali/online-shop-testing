@@ -6,11 +6,13 @@ use Model\User;
 class SessionAuthenticationService implements AuthenticationInterface
 {
     private User $user;
+
     public function getCurrentUser(): ?User
     {
         if (isset($this->user)){
             return $this->user;
         }
+
         if (!$this->check()) {
             return null;
         }
@@ -23,6 +25,7 @@ class SessionAuthenticationService implements AuthenticationInterface
         return $this->user;
 
     }
+
     public function login(string $email, string $password) : bool
     {
         $user = User::getOneByEmail($email);
@@ -40,6 +43,7 @@ class SessionAuthenticationService implements AuthenticationInterface
 
         return true;
     }
+
     public function logout() : void
     {
         $this->startSession();
@@ -47,12 +51,14 @@ class SessionAuthenticationService implements AuthenticationInterface
             $_SESSION['user_id'] = null;
         }
     }
+
     public function check(): bool
     {
         $this->startSession();
 
         return isset($_SESSION['user_id']);
     }
+
     public function startSession() : void
     {
         if (session_status() !== PHP_SESSION_ACTIVE)

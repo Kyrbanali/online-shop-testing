@@ -8,6 +8,7 @@ class Request
     private string $uri;
     private array $headers;
     protected array $body;
+
     public function __construct(string $method, string $uri, array $headers = [], array $body = [])
     {
         $this->method = $method;
@@ -15,6 +16,7 @@ class Request
         $this->headers = $headers;
         $this->body = $body;
     }
+
     public function getMethod() : string
     {
         return $this->method;

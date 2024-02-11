@@ -15,6 +15,7 @@ class App
     {
         return $this->routes;
     }
+
     public function get(string $route, string $class, string $methodName, string $request = null) : void
     {
         $this->routes[$route]['GET'] = [
@@ -23,6 +24,7 @@ class App
             'request' => $request,
         ];
     }
+
     public function post(string $route, string $class, string $methodName, string $request = null) : void
     {
         $this->routes[$route]['POST'] = [

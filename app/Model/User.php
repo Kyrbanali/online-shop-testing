@@ -6,6 +6,7 @@ class User extends Model
     private string $name;
     private string $email;
     private string $password;
+
     public function __construct(array $data)
     {
         $this->id = $data['id'];
@@ -13,6 +14,7 @@ class User extends Model
         $this->email = $data['email'] ;
         $this->password = $data['password'];
     }
+
     public static function getOneByEmail(string $email): ?User
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
@@ -25,6 +27,7 @@ class User extends Model
 
         return new User($data);
     }
+
     public static function getOneById(string $id): ?User
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');

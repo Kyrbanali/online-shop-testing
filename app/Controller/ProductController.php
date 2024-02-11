@@ -12,6 +12,7 @@ class ProductController
     {
         $this->authenticationService = new SessionAuthenticationService();
     }
+
     public function getCatalog()
     {
         $user = $this->authenticationService->getCurrentUser();

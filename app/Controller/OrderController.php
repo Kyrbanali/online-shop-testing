@@ -8,10 +8,12 @@ use Service\SessionAuthenticationService;
 class OrderController
 {
     private SessionAuthenticationService $authenticationService;
+
     public function __construct()
     {
         $this->authenticationService = new SessionAuthenticationService();
     }
+
     public function getOrder(OrderRequest $request): void
     {
         $user = $this->authenticationService->getCurrentUser();

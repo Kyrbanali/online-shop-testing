@@ -9,10 +9,12 @@ use Service\SessionAuthenticationService;
 class UserController
 {
     private SessionAuthenticationService $authenticationService;
+
     public function __construct()
     {
         $this->authenticationService = new SessionAuthenticationService();
     }
+
     public function postLogin(LoginRequest $request)
     {
         $errors = $request->validate();
@@ -31,15 +33,18 @@ class UserController
         }
         require_once('./../View/get_login.phtml');
     }
+
     public function getLogin()
     {
         require_once './../View/get_login.phtml';
     }
+
     public function logout()
     {
         $this->authenticationService->logout();
         header('Location: /login');
     }
+
     public function postRegistrate(RegistrateRequest $request)
     {
         $errors = $request->validate();
@@ -57,6 +62,7 @@ class UserController
         }
         require_once './../View/get_registrate.phtml';
     }
+
     public function getRegistrate()
     {
         require_once './../View/get_registrate.phtml';
