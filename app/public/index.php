@@ -26,7 +26,6 @@ $app->get('/cart',CartController::class, 'getCart');
 $app->post('/product-plus',CartController::class, 'plus', \Request\PlusRequest::class);
 $app->post('/product-minus',CartController::class, 'minus', \Request\MinusRequest::class);
 
-$app->get('/order', OrderController::class, 'getOrder', \Request\OrderRequest::class);
 $app->post('/order', OrderController::class, 'postOrder', \Request\OrderRequest::class);
 
 
