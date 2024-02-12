@@ -6,7 +6,6 @@ use Model\Product;
 use Model\UserProduct;
 use Request\MinusRequest;
 use Request\PlusRequest;
-use Request\Request;
 use Service\SessionAuthenticationService;
 
 class CartController
@@ -26,7 +25,7 @@ class CartController
         }
         $userId = $user->getId();
 
-        $userProducts = UserProduct::getCart($userId);
+        $userProducts = UserProduct::getCartItems($userId);
 
         if (!empty($userProducts)) {
             foreach ($userProducts as $userProduct) {
@@ -37,7 +36,10 @@ class CartController
                 $products = Product::getAllByIds($productIds);
             }
         }
+
         $cartQuantity = UserProduct::getCartQuantity($userId);;
+
+        $totalPrice = 0;
 
         require_once './../View/cart.phtml';
     }

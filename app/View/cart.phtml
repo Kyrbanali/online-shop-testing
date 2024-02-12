@@ -15,7 +15,9 @@
 
             <p>Стоимость: <?php echo $product->getPrice(); ?> ₽</p>
 
-            <p>Количичество: <span class="quantity-display"><?php echo $product->getQuantity($_SESSION['user_id']); ?></span> </p>
+            <p>Количичество: <span class="quantity-display"><?php echo $product->getQuantity($user->getId()); ?></span> </p>
+
+            <?php $totalPrice += $product->getPrice() * $product->getQuantity($user->getId()); ?>
 
             <div>
                 <form class="quantity-form" data-action="plus" onsubmit="return false" method="post">
@@ -36,6 +38,37 @@
     <?php endforeach; } ?>
 </div>
 
+<div>
+    <h1  class="total-Price">Сумма к оплате: <?php echo $totalPrice; ?></h1>
+</div>
+
+<div class="order-container">
+    <form class="order-form" action="/order" method="post">
+
+        <div class="order-form-field">
+            <label for="phone"><b>Phone</b></label>
+            <?php   if (isset($errors['user_phone'])): ?>
+                <div class="labelError">
+                    <label><?php echo $errors['user_phone']; ?></label>
+                </div>
+            <?php endif; ?>
+            <input type="text" placeholder="Enter Phone" name="phone" id="phone" required>
+        </div>
+
+        <div class="order-form-field">
+            <label for="address"><b>Address</b></label>
+            <?php   if (isset($errors['user_address'])): ?>
+                <div class="labelError">
+                    <label><?php echo $errors['user_address']; ?></label>
+                </div>
+            <?php endif; ?>
+            <input type="text" placeholder="Enter Address" name="address" id="address" required>
+        </div>
+
+        <button class="order-btn">Оформить заказ</button>
+    </form>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
     $("document").ready(function() {
@@ -54,6 +87,7 @@
                 }
             })
         });
+
         function updateQuantityDisplay(displayElement, action) {
             // Получаем текущее значение количества из интерфейса
             var currentQuantity = parseInt(displayElement.text());
@@ -92,6 +126,62 @@
         justify-content: center;
         margin: 0;
 
+    }
+
+    .labelError {
+        color: red;
+    }
+
+    .order-container {
+        display: grid;
+        place-items: center;
+        height: 100%;
+        max-height: 300px/* Высота 100% экрана, чтобы форма оставалась по центру */
+    }
+
+    .order-form-field {
+        max-width: 300px;
+        text-align: center;
+    }
+
+    * {box-sizing: border-box}
+
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+        max-width: 200px;
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #8888;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .order-btn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        max-width: 200px;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .order-btn:hover {
+        opacity:1;
+    }
+
+    /* Overwrite default styles of hr */
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
     }
 
     header {
@@ -176,5 +266,9 @@
         text-decoration: none;
         background-color: #333;
         color: #fff;
+    }
+
+    .order-form {
+        text-align: center;
     }
 </style>

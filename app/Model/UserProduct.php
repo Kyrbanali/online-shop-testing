@@ -28,7 +28,7 @@ class UserProduct extends Model
         return $this->product_id;
     }
 
-    public static function getCart(int $userId): ?array
+    public static function getCartItems(int $userId): ?array
     {
         $sql = <<<SQL
             SELECT * 
@@ -104,9 +104,13 @@ class UserProduct extends Model
 
         if ($recordExists)
         {
-            if ($quantity > 1)
-            {
-                $sql = "UPDATE user_products SET quantity = quantity - 1 WHERE user_id = :user_id AND product_id = :product_id";
+            if ($quantity > 1) {
+
+                $sql = <<<SQL
+                UPDATE user_products 
+                SET quantity = quantity - 1 
+                WHERE user_id = :user_id AND product_id = :product_id;
+                SQL;
 
                 $data = ['user_id' => $userId, 'product_id' => $productId];
 
