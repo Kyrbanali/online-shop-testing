@@ -1,8 +1,9 @@
 <?php
 
-namespace Service;
+namespace Service\Authentication;
 use Model\User;
-interface AuthenticationInterface
+
+interface AuthenticationServiceInterface
 {
     public function login(string $email, string $password) : bool;
 

@@ -4,12 +4,12 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
-use Service\CartService;
-use Service\SessionAuthenticationService;
+use Service\Authentication\AuthenticationServiceInterface;
+
 class ProductController
 {
-    private SessionAuthenticationService $authenticationService;
-    public function __construct(SessionAuthenticationService $authenticationService)
+    private AuthenticationServiceInterface $authenticationService;
+    public function __construct(AuthenticationServiceInterface $authenticationService)
     {
         $this->authenticationService = $authenticationService;
     }

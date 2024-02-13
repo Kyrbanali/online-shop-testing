@@ -5,12 +5,13 @@ namespace Controller;
 use Model\User;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
-use Service\SessionAuthenticationService;
+use Service\Authentication\AuthenticationServiceInterface;
+
 class UserController
 {
-    private SessionAuthenticationService $authenticationService;
+    private AuthenticationServiceInterface $authenticationService;
 
-    public function __construct(SessionAuthenticationService $authenticationService)
+    public function __construct(AuthenticationServiceInterface $authenticationService)
     {
         $this->authenticationService = $authenticationService;
     }

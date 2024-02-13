@@ -3,11 +3,9 @@
 
 namespace Core;
 
-use Controller\ProductController;
-use Controller\UserController;
 use Request\Request;
+use Service\Authentication\SessionAuthenticationServiceService;
 use Service\CartService;
-use Service\SessionAuthenticationService;
 
 class App
 {
@@ -50,7 +48,7 @@ class App
 
             if (class_exists($class)) {
 
-                $authenticationService = new SessionAuthenticationService();
+                $authenticationService = new SessionAuthenticationServiceService();
                 $cartService = new CartService();
                 $obj = new $class($authenticationService, $cartService);
 

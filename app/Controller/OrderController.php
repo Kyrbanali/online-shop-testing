@@ -3,17 +3,16 @@
 namespace Controller;
 
 use Model\OrderModel;
-use Model\Product;
 use Model\UserProduct;
 use Request\OrderRequest;
-use Service\SessionAuthenticationService;
+use Service\Authentication\AuthenticationServiceInterface;
 
 class OrderController
 {
-    private SessionAuthenticationService $authenticationService;
+    private AuthenticationServiceInterface $authenticationService;
     private OrderModel $orderModel;
 
-    public function __construct(SessionAuthenticationService $authenticationService)
+    public function __construct(AuthenticationServiceInterface $authenticationService)
     {
         $this->authenticationService = $authenticationService;
         $this->orderModel = new OrderModel();

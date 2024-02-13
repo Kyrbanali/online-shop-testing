@@ -1,9 +1,9 @@
 <?php
 
-namespace Service;
+namespace Service\Authentication;
 use Model\User;
 
-class SessionAuthenticationService implements AuthenticationInterface
+class SessionAuthenticationServiceService implements AuthenticationServiceInterface
 {
     private User $user;
 

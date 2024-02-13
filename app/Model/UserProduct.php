@@ -54,9 +54,7 @@ class UserProduct extends Model
         $cart = $stmt->fetchAll();
 
 
-        foreach ($cart as $item) {
-            $userProducts[] = new UserProduct($item['id'], $item['user_id'], $item['product_id'], $item['quantity']);
-        }
+        $userProducts = self::hydrate($cart);
 
         if (empty($userProducts)) {
             return null;
@@ -191,5 +189,22 @@ class UserProduct extends Model
         $count = $stmt->fetchColumn();
 
         return $count > 0;
+    }
+
+    private static function hydrate(array $products, bool $associative = false): ?array
+    {
+        $data = [];
+
+        foreach ($products as $product) {
+
+            $data[] = new UserProduct(
+                $product['id'],
+                $product['user_id'],
+                $product['product_id'],
+                $product['quantity'],
+            );
+        }
+
+        return $data;
     }
 }

@@ -26,6 +26,12 @@ class OrderModel extends Model
         $stmt = self::prepareExecute($sql, $data);
         $orderId = $stmt->fetchColumn();
 
+        $this->createOrderItems($orderId ,$cartItems);
+
+    }
+
+    public function createOrderItems($orderId ,$cartItems)
+    {
         foreach ($cartItems as $cartItem) {
             $productId = $cartItem->getProductId();
             $quantity = $cartItem->getQuantity();
@@ -43,9 +49,6 @@ class OrderModel extends Model
 
             self::prepareExecute($sql, $data);
         }
-
-
-
     }
 
     private function generateOrderNumber(): string
