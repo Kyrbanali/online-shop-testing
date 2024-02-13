@@ -14,13 +14,14 @@ class CartController
     private SessionAuthenticationService $authenticationService;
     private CartService $cartService;
 
-    public function __construct(SessionAuthenticationService $authenticationService)
+    public function __construct(SessionAuthenticationService $authenticationService, CartService $cartService)
     {
         $this->authenticationService = $authenticationService;
+        $this->cartService = $cartService;
 
     }
 
-    public function getCart()
+    public function getCart(): void
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
@@ -30,16 +31,7 @@ class CartController
 
         $userProducts = UserProduct::getCartItems($userId);
 
-
-        if (!empty($userProducts)) {
-            foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct->getProductId();
-            }
-
-            if (!empty($productIds)) {
-                $products = Product::getAllByIds($productIds);
-            }
-        }
+        $products = $this->cartService->getCart($userProducts);
 
         $cartQuantity = UserProduct::getCartQuantity($userId);;
 
@@ -48,44 +40,35 @@ class CartController
         require_once './../View/cart.phtml';
     }
 
-    public function plus(PlusRequest $request)
+    public function plus(PlusRequest $request): void
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
             header("Location: /login");
         }
 
-        //$this->cartService->plus($request->getProductId(), $user);
-
-        $userId = $user->getId();
         $errors = $request->validate();
+
         if (empty($errors)) {
 
-            $productId = $request->getProductId();
+            $this->cartService->plus($request->getProductId(), $user);
 
-            UserProduct::updateOrCreate($userId, $productId);
             header("Location: /catalog");
         }
 
     }
 
-    public function minus(MinusRequest $request)
+    public function minus(MinusRequest $request): void
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
             header("Location: /login");
         }
 
-        //$this->cartService->minus();
-
-        $userId = $user->getId();
         $errors = $request->validate();
+
         if (empty($errors)) {
-            $userProduct = UserProduct::getOneByUserIdProductId($userId, $request->getProductId());
-
-            $productId = $request->getProductId();
-
-            $userProduct->updateOrDelete($userId, $productId);
+            $this->cartService->minus($request->getProductId(), $user);
 
             header("Location: /catalog");
         }

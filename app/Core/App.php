@@ -52,7 +52,7 @@ class App
 
                 $authenticationService = new SessionAuthenticationService();
                 $cartService = new CartService();
-                $obj = new $class($authenticationService);
+                $obj = new $class($authenticationService, $cartService);
 
                 if (method_exists($obj, $method))
                 {
