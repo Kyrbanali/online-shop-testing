@@ -29,11 +29,14 @@ class OrderController
 
         $cartItems = UserProduct::getCartItems($userId);
 
-        $phone = $request->getPhone();
-        $address = $request->getAddress();
+        $errors = $request->validate();
 
         if (!empty($cartItems)) {
-            $this->orderModel->create($phone, $address, $cartItems);
+            if (empty($errors)) {
+                $phone = $request->getPhone();
+                $address = $request->getAddress();
+                $this->orderModel->create($userId, $phone, $address, $cartItems);
+            }
         }
 
     }

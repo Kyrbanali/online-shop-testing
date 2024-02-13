@@ -6,20 +6,20 @@ class OrderRequest extends Request
 {
     public function getPhone()
     {
-        return $this->body['user_phone'];
+        return $this->body['phone'];
     }
 
     public function getAddress()
     {
-        return $this->body['user_address'];
+        return $this->body['address'];
     }
 
     public function validate(): array
     {
         $errors = [];
 
-        $phoneNumber = $this->body['user_phone'];
-        $address = $this->body['user_address'];
+        $phoneNumber = $this->body['phone'];
+        $address = $this->body['address'];
 
         if (!isset($phoneNumber)) {
             $errors['user_phone'] = 'Поле phone не указано';
@@ -29,7 +29,7 @@ class OrderRequest extends Request
 
         if (!isset($address)) {
             $errors['user_address'] = 'Поле address не указано';
-        } elseif (strlen($address) >= 5) {
+        } elseif (!strlen($address) >= 5) {
             $errors['user_address'] = 'Введите больше 4х символов';
         }
 
