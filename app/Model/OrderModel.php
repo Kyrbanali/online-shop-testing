@@ -28,7 +28,7 @@ class OrderModel extends Model
 
         foreach ($cartItems as $cartItem) {
             $productId = $cartItem->getProductId();
-            $quantity = UserProduct::getQuantity($userId, $productId);
+            $quantity = $cartItem->getQuantity();
 
             $sql = <<<SQL
             insert into order_items (order_id, product_id, quantity)

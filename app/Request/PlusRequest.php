@@ -4,7 +4,7 @@ namespace Request;
 
 class PlusRequest extends Request
 {
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
         return $this->body['product_id'];
     }

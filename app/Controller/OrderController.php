@@ -13,9 +13,9 @@ class OrderController
     private SessionAuthenticationService $authenticationService;
     private OrderModel $orderModel;
 
-    public function __construct()
+    public function __construct(SessionAuthenticationService $authenticationService)
     {
-        $this->authenticationService = new SessionAuthenticationService();
+        $this->authenticationService = $authenticationService;
         $this->orderModel = new OrderModel();
     }
 

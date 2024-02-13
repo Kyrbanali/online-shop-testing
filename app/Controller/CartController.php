@@ -6,15 +6,18 @@ use Model\Product;
 use Model\UserProduct;
 use Request\MinusRequest;
 use Request\PlusRequest;
+use Service\CartService;
 use Service\SessionAuthenticationService;
 
 class CartController
 {
     private SessionAuthenticationService $authenticationService;
+    private CartService $cartService;
 
-    public function __construct()
+    public function __construct(SessionAuthenticationService $authenticationService)
     {
-        $this->authenticationService = new SessionAuthenticationService();
+        $this->authenticationService = $authenticationService;
+
     }
 
     public function getCart()
@@ -26,6 +29,7 @@ class CartController
         $userId = $user->getId();
 
         $userProducts = UserProduct::getCartItems($userId);
+
 
         if (!empty($userProducts)) {
             foreach ($userProducts as $userProduct) {
@@ -50,11 +54,14 @@ class CartController
         if (!$user) {
             header("Location: /login");
         }
+
+        //$this->cartService->plus($request->getProductId(), $user);
+
         $userId = $user->getId();
         $errors = $request->validate();
         if (empty($errors)) {
 
-            $productId = $request->getId();
+            $productId = $request->getProductId();
 
             UserProduct::updateOrCreate($userId, $productId);
             header("Location: /catalog");
@@ -68,13 +75,18 @@ class CartController
         if (!$user) {
             header("Location: /login");
         }
+
+        //$this->cartService->minus();
+
         $userId = $user->getId();
         $errors = $request->validate();
         if (empty($errors)) {
+            $userProduct = UserProduct::getOneByUserIdProductId($userId, $request->getProductId());
 
-            $productId = $request->getId();
+            $productId = $request->getProductId();
 
-            UserProduct::updateOrDelete($userId, $productId);
+            $userProduct->updateOrDelete($userId, $productId);
+
             header("Location: /catalog");
         }
     }

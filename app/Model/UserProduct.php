@@ -7,10 +7,17 @@ class UserProduct extends Model
     private int $product_id;
     private int $quantity;
 
+    public function __construct(int $id, int $user_id, int $product_id, int $quantity)
+    {
+        $this->id = $id;
+        $this->user_id = $user_id;
+        $this->product_id = $product_id;
+        $this->quantity = $quantity;
+    }
+
     public function setQuantity(int $quantity) : void
     {
         $this->quantity = $quantity;
-
     }
 
     public function getId(): int
@@ -28,6 +35,11 @@ class UserProduct extends Model
         return $this->product_id;
     }
 
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
     public static function getCartItems(int $userId): ?array
     {
         $sql = <<<SQL
@@ -39,7 +51,42 @@ class UserProduct extends Model
         $data = ['user_id' => $userId];
 
         $stmt = self::prepareExecute($sql, $data);
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+        $cart = $stmt->fetchAll();
+
+
+        foreach ($cart as $item) {
+            $userProducts[] = new UserProduct($item['id'], $item['user_id'], $item['product_id'], $item['quantity']);
+        }
+
+        if (empty($userProducts)) {
+            return null;
+        }
+
+        return $userProducts;
+    }
+
+    public static function getOneByUserIdProductId(int $userId, int $productId)
+    {
+        $sql = <<<SQL
+        SELECT * FROM user_products
+        WHERE user_id = :user_id AND product_id = :product_id
+        SQL;
+
+        $prepare = [
+            'user_id' => $userId,
+            'product_id' => $productId
+        ];
+
+        $stmt = self::prepareExecute($sql, $prepare);
+        $data = $stmt->fetch();
+
+        if (empty($data)) {
+            return null;
+        }
+
+        return new UserProduct($data['id'], $data['user_id'], $data['product_id'], $data['quantity']);
+
+
     }
 
     public static function getCartQuantity(int $userId) : ?int
@@ -52,11 +99,13 @@ class UserProduct extends Model
             GROUP BY users.id;
         SQL;
 
-        $data = ['user_id' => $userId];
+        $data = [
+            'user_id' => $userId
+        ];
 
         $stmt = self::prepareExecute($sql, $data);
-
         $result = $stmt->fetch();
+
         return $result['total_quantity'] ?? null;
     }
 
@@ -97,10 +146,10 @@ class UserProduct extends Model
         }
     }
 
-    public static function updateOrDelete(int $userId, int $productId) : void
+    public function updateOrDelete(int $userId, int $productId) : void
     {
         $recordExists = self::recordExists($userId, $productId);
-        $quantity = self::getQuantity($userId, $productId);
+        $quantity = $this->getQuantity();
 
         if ($recordExists)
         {
@@ -130,21 +179,6 @@ class UserProduct extends Model
         {
             //здесь типа обработка удаления пустоты может быть, но вряд ли
         }
-    }
-
-    public static function getQuantity(int $userId, int $productId)
-    {
-        $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-
-
-        $data = ['user_id' => $userId, 'product_id' => $productId];
-
-        $stmt = self::prepareExecute($sql, $data);
-
-        $quantity = $stmt->fetchColumn();
-
-        return $quantity;
-
     }
 
     public static function recordExists(int $userId, int $productId) : bool
