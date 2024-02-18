@@ -6,7 +6,7 @@ class Model
 {
     protected static PDO $pdo;
 
-    protected static function getPDO() : PDO
+    public static function getPDO() : PDO
     {
         self::$pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
         return self::$pdo;

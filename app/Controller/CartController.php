@@ -2,22 +2,18 @@
 
 namespace Controller;
 
+use Model\Product;
 use Model\UserProduct;
 use Request\MinusRequest;
 use Request\PlusRequest;
 use Service\Authentication\AuthenticationServiceInterface;
-use Service\CartService;
 
 class CartController
 {
     private AuthenticationServiceInterface $authenticationService;
-    private CartService $cartService;
-
-    public function __construct(AuthenticationServiceInterface $authenticationService, CartService $cartService)
+    public function __construct(AuthenticationServiceInterface $authenticationService)
     {
         $this->authenticationService = $authenticationService;
-        $this->cartService = $cartService;
-
     }
 
     public function getCart(): void
@@ -30,7 +26,15 @@ class CartController
 
         $userProducts = UserProduct::getCartItems($userId);
 
-        $products = $this->cartService->getCart($userProducts);
+        if (!empty($userProducts)) {
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct->getProductId();
+            }
+
+            if (!empty($productIds)) {
+                $products = Product::getAllByIds($productIds);
+            }
+        }
 
         $cartQuantity = UserProduct::getCartQuantity($userId);;
 
@@ -50,7 +54,9 @@ class CartController
 
         if (empty($errors)) {
 
-            $this->cartService->plus($request->getProductId(), $user);
+            $userId = $user->getId();
+
+            UserProduct::updateOrCreate($userId, $request->getProductId());
 
             header("Location: /catalog");
         }
@@ -67,7 +73,11 @@ class CartController
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $this->cartService->minus($request->getProductId(), $user);
+            $userId = $user->getId();
+            $productId = $request->getProductId();
+
+            $userProduct = UserProduct::getOneByUserIdProductId($userId, $productId);
+            $userProduct->updateOrDelete($userId, $productId);
 
             header("Location: /catalog");
         }

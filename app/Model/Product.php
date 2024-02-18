@@ -77,6 +77,22 @@ class Product extends Model
         return $data;
     }
 
+    public function getOneById(int $productId): ?Product
+    {
+        $sql = 'SELECT * FROM products where id = :product_id';
+
+        $data = ['product_id' => $productId];
+
+        $stmt = self::prepareExecute($sql, $data);
+        $result = $stmt->fetch();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        return new Product($result['id'], $result['name'], $result['description'], $result['price'], $result['img_url']);
+    }
+
     public static function hydrate(array $products, bool $associative = false): ?array
     {
         $data = [];
@@ -102,28 +118,6 @@ class Product extends Model
         }
 
         return $data;
-    }
-
-    public function getOneById(int $productId)
-    {
-        $sql = 'SELECT * FROM products where id = :product_id';
-
-        $data = ['product_id' => $productId];
-
-        $stmt = self::prepareExecute($sql, $data);
-        $result = $stmt->fetch();
-    }
-
-    public function getQuantity(int $userId) : int
-    {
-        $sql = "SELECT quantity FROM user_products WHERE user_id = :user_id AND product_id = :product_id";
-
-        $data = ['user_id' => $userId, 'product_id' => $this->id];
-        $stmt = self::prepareExecute($sql, $data);
-
-        $result = $stmt->fetch();
-        return $result['quantity'];
-
     }
 
 

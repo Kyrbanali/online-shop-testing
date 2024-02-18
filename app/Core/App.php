@@ -6,6 +6,7 @@ namespace Core;
 use Request\Request;
 use Service\Authentication\SessionAuthenticationServiceService;
 use Service\CartService;
+use Service\OrderService;
 
 class App
 {
@@ -49,8 +50,9 @@ class App
             if (class_exists($class)) {
 
                 $authenticationService = new SessionAuthenticationServiceService();
-                $cartService = new CartService();
-                $obj = new $class($authenticationService, $cartService);
+                $orderService = new OrderService();
+
+                $obj = new $class($authenticationService, $orderService);
 
                 if (method_exists($obj, $method))
                 {

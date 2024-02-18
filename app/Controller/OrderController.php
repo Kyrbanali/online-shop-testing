@@ -2,20 +2,22 @@
 
 namespace Controller;
 
-use Model\OrderModel;
+use Model\Order;
+use Model\OrderItem;
 use Model\UserProduct;
 use Request\OrderRequest;
 use Service\Authentication\AuthenticationServiceInterface;
+use Service\OrderService;
 
 class OrderController
 {
     private AuthenticationServiceInterface $authenticationService;
-    private OrderModel $orderModel;
+    private OrderService $orderService;
 
-    public function __construct(AuthenticationServiceInterface $authenticationService)
+    public function __construct(AuthenticationServiceInterface $authenticationService, OrderService $orderService)
     {
         $this->authenticationService = $authenticationService;
-        $this->orderModel = new OrderModel();
+        $this->orderService = $orderService;
     }
 
     public function checkout(OrderRequest $request): void
@@ -34,10 +36,9 @@ class OrderController
             if (empty($errors)) {
                 $phone = $request->getPhone();
                 $address = $request->getAddress();
-                $this->orderModel->create($userId, $phone, $address, $cartItems);
+                $this->orderService->create($userId, $phone, $address);
             }
         }
-
     }
 
 

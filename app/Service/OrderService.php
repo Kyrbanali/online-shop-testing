@@ -2,38 +2,32 @@
 
 namespace Service;
 
+use Model\Model;
+use Model\Order;
+use Model\OrderItem;
 use Model\User;
+use Model\UserProduct;
 
 class OrderService
 {
-    public function create(int $userId, string $phone, string $address, array $cartItems)
+    public function create(int $userId, string $phone, string $address)
     {
-        $orderNumber = $this->generateOrderNumber();
-        $orderDate = date('Y-m-d H:i:s');
+        $pdo = Model::getPDO();
+        $pdo->beginTransaction();
 
-        foreach ($cartItems as $cartItem) {
-            $productId = $cartItem->getProductId();
-            $quantity = $cartItem->getQuantity();
+        try {
+            $orderId = Order::create($userId, $phone, $address);
 
-            $sql = <<<SQL
-            insert into order_items (order_id, product_id, quantity)
-            values (:order_id, :product_id, :quantity)
-            SQL;
+            $cartItems = UserProduct::getCartItems($userId);
 
-            $data = [
-                'order_id' => $orderId,
-                'product_id' => $productId,
-                'quantity' => $quantity
-            ];
+            foreach ($cartItems as $cartItem) {
 
-            self::prepareExecute($sql, $data);
+                OrderItem::create($orderId, $cartItem->getProductId(), $cartItem->getQuantity());
+
+            }
+
+        } catch (\Throwable $exception) {
+            $pdo->rollBack();
         }
-
     }
-
-    private function generateOrderNumber(): string
-    {
-        return date('YmdHis') . mt_rand(1000, 9999);
-    }
-
 }

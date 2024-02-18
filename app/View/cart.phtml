@@ -15,9 +15,9 @@
 
             <p>Стоимость: <?php echo $product->getPrice(); ?> ₽</p>
 
-            <p>Количичество: <span class="quantity-display"><?php echo $product->getQuantity($user->getId()); ?></span> </p>
+            <p>Количичество: <span class="quantity-display"><?php echo $userProduct->getQuantity(); ?></span> </p>
 
-            <?php $totalPrice += $product->getPrice() * $product->getQuantity($user->getId()); ?>
+            <?php $totalPrice += $product->getPrice() * $userProduct->getQuantity(); ?>
 
             <div>
                 <form class="quantity-form" data-action="plus" onsubmit="return false" method="post">
