@@ -2,10 +2,9 @@
 
 namespace Core;
 
+use Core\Container\Container;
 use Request\Request;
-use Service\Authentication\SessionAuthenticationServiceService;
 use Service\LoggerService;
-use Service\OrderService;
 
 class App
 {

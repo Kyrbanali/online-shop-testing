@@ -1,8 +1,8 @@
 <?php
 
-namespace Core;
+namespace Core\Container;
 
-class Container
+class Container implements ContainerInterface
 {
     private array $services;
 

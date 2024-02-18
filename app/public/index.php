@@ -1,15 +1,15 @@
 <?php
 
-use Core\App;
-use Core\Autoloader;
-use Controller\ProductController;
-use Controller\UserController;
 use Controller\CartController;
 use Controller\OrderController;
+use Controller\ProductController;
+use Controller\UserController;
+use Core\App;
+use Core\Autoloader;
+use Core\Container\Container;
+use Service\Authentication\AuthenticationServiceInterface;
 use Service\Authentication\SessionAuthenticationServiceService;
 use Service\OrderService;
-use Core\Container;
-use Service\Authentication\AuthenticationServiceInterface;
 
 require_once './../Core/Autoloader.php';
 
