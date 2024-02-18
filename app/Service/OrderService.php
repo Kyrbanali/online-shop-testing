@@ -5,7 +5,6 @@ namespace Service;
 use Model\Model;
 use Model\Order;
 use Model\OrderItem;
-use Model\User;
 use Model\UserProduct;
 
 class OrderService
@@ -15,18 +14,20 @@ class OrderService
         $pdo = Model::getPDO();
         $pdo->beginTransaction();
 
+        $cartItems = UserProduct::getCartItems($userId);
+
         try {
             $orderId = Order::create($userId, $phone, $address);
 
-            $cartItems = UserProduct::getCartItems($userId);
-
             foreach ($cartItems as $cartItem) {
-
                 OrderItem::create($orderId, $cartItem->getProductId(), $cartItem->getQuantity());
-
             }
 
         } catch (\Throwable $exception) {
+            $file = $exception->getFile();
+            $line = $exception->getLine();
+            $message = $exception->getMessage();
+
             $pdo->rollBack();
         }
     }

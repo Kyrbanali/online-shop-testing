@@ -1,16 +1,21 @@
 <?php
 
-
 namespace Core;
 
 use Request\Request;
 use Service\Authentication\SessionAuthenticationServiceService;
-use Service\CartService;
 use Service\OrderService;
 
 class App
 {
     private array $routes = [];
+
+    private Container $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     public function getRoutes() : array
     {
@@ -49,10 +54,7 @@ class App
 
             if (class_exists($class)) {
 
-                $authenticationService = new SessionAuthenticationServiceService();
-                $orderService = new OrderService();
-
-                $obj = new $class($authenticationService, $orderService);
+                $obj = $this->container->get($class);
 
                 if (method_exists($obj, $method))
                 {
@@ -61,7 +63,19 @@ class App
                     } else {
                         $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
                     }
-                    $obj->$method($request);
+
+                    try {
+                        $obj->$method($request);
+
+                    } catch (\Throwable $exception) {
+                        $file = $exception->getFile();
+                        $line = $exception->getLine();
+                        $message = $exception->getMessage();
+
+
+                        require_once './../View/500.html';
+                    }
+
                 } else {
                     echo "Метод $method не найден в классе $class";
                 }

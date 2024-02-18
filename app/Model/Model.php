@@ -8,7 +8,14 @@ class Model
 
     public static function getPDO() : PDO
     {
-        self::$pdo = new PDO("pgsql:host=db;port=5432;dbname=dbtest", "dbuser", "dbpwd");
+        $dbHost = getenv('DB_HOST', 'db');
+        $dbName = getenv('DB_NAME', 'dbtest');
+        $dbUser = getenv('DB_USER', 'dbuser');
+        $dbPassword = getenv('DB_PASSWORD', 'dbpwd');
+
+
+        self::$pdo = new PDO("pgsql:host=$dbHost;port=5432;dbname=$dbName", "$dbUser", "$dbPassword");
+
         return self::$pdo;
     }
 
