@@ -28,6 +28,8 @@ class OrderService
             $line = $exception->getLine();
             $message = $exception->getMessage();
 
+            LoggerService::error($file, $line, $message);
+
             $pdo->rollBack();
         }
     }

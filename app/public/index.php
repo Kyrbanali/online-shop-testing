@@ -6,34 +6,46 @@ use Controller\ProductController;
 use Controller\UserController;
 use Controller\CartController;
 use Controller\OrderController;
+use Service\Authentication\SessionAuthenticationServiceService;
+use Service\OrderService;
+use Core\Container;
+use Service\Authentication\AuthenticationServiceInterface;
 
 require_once './../Core/Autoloader.php';
 
 Autoloader::registrate();
 
-$container = new \Core\Container();
+$container = new Container();
 
-$container->set(UserController::class, function () {
-    $authenticationService = new \Service\Authentication\SessionAuthenticationServiceService();
+$container->set(AuthenticationServiceInterface::class, function () {
+    return new SessionAuthenticationServiceService();
+});
+
+$container->set(OrderService::class, function () {
+    return new OrderService();
+});
+
+$container->set(UserController::class, function (Container $container) {
+    $authenticationService = $container->get(AuthenticationServiceInterface::class);
 
     return new UserController($authenticationService);
 });
 
-$container->set(ProductController::class, function () {
-    $authenticationService = new \Service\Authentication\SessionAuthenticationServiceService();
+$container->set(ProductController::class, function (Container $container) {
+    $authenticationService = $container->get(AuthenticationServiceInterface::class);
 
     return new ProductController($authenticationService);
 });
 
-$container->set(CartController::class, function () {
-    $authenticationService = new \Service\Authentication\SessionAuthenticationServiceService();
+$container->set(CartController::class, function (Container $container) {
+    $authenticationService = $container->get(AuthenticationServiceInterface::class);
 
     return new CartController($authenticationService);
 });
 
-$container->set(OrderController::class, function () {
-    $authenticationService = new \Service\Authentication\SessionAuthenticationServiceService();
-    $orderService = new \Service\OrderService();
+$container->set(OrderController::class, function (Container $container) {
+    $authenticationService = $container->get(AuthenticationServiceInterface::class);
+    $orderService = $container->get(OrderService::class);
 
     return new OrderController($authenticationService, $orderService);
 });

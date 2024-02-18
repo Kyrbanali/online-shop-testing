@@ -16,7 +16,7 @@ class Container
         if (isset($this->services[$class])) {
             $callback = $this->services[$class];
 
-            return $callback();
+            return $callback($this);
         }
 
         return new $class();

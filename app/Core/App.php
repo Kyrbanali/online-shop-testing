@@ -4,6 +4,7 @@ namespace Core;
 
 use Request\Request;
 use Service\Authentication\SessionAuthenticationServiceService;
+use Service\LoggerService;
 use Service\OrderService;
 
 class App
@@ -71,6 +72,8 @@ class App
                         $file = $exception->getFile();
                         $line = $exception->getLine();
                         $message = $exception->getMessage();
+
+                        LoggerService::error($file, $line, $message);
 
 
                         require_once './../View/500.html';
