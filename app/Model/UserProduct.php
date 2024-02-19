@@ -53,7 +53,6 @@ class UserProduct extends Model
         $stmt = self::prepareExecute($sql, $data);
         $cart = $stmt->fetchAll();
 
-
         $userProducts = self::hydrate($cart);
 
         if (empty($userProducts)) {
@@ -83,18 +82,15 @@ class UserProduct extends Model
         }
 
         return new UserProduct($data['id'], $data['user_id'], $data['product_id'], $data['quantity']);
-
-
     }
 
     public static function getCartQuantity(int $userId) : ?int
     {
         $sql = <<<SQL
             SELECT SUM(user_products.quantity) as total_quantity
-            FROM users
-            JOIN user_products ON users.id = user_products.user_id
-            WHERE users.id = :user_id
-            GROUP BY users.id;
+            FROM user_products
+            WHERE user_products.user_id = :user_id
+            GROUP BY user_products.user_id;
         SQL;
 
         $data = [
@@ -105,19 +101,6 @@ class UserProduct extends Model
         $result = $stmt->fetch();
 
         return $result['total_quantity'] ?? null;
-    }
-
-    public function save(int $quantity, int $userId, int $productId)
-    {
-        $sql = <<<SQL
-                UPDATE user_products
-                SET quantity = :quantity
-                WHERE product_id = :product_id AND user_id = :user_id;
-        SQL;
-
-        $data = ['quantity' => $quantity, 'user_id' => $userId, 'product_id' => $productId];
-
-        self::prepareExecute($sql, $data);
     }
 
     public static function updateOrCreate(int $userId, int $productId) : void

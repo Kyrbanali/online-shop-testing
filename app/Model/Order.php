@@ -56,7 +56,7 @@ class Order extends Model
 
     public static function create(int $userId, string $phone, string $address): int
     {
-        $orderNumber = self::generateOrderNumber();
+        $orderNumber = date('YmdHis') . mt_rand(1000, 9999);
         $orderDate = date('Y-m-d H:i:s');
 
         $sql = <<<SQL
@@ -96,11 +96,6 @@ class Order extends Model
         }
 
         return new Order($data['id'], $data['user_id'], $data['phone'], $data['address'], $data['order_date'], $data['order_number']);
-    }
-
-    private static function generateOrderNumber(): string
-    {
-        return date('YmdHis') . mt_rand(1000, 9999);
     }
 
 }
