@@ -48,7 +48,7 @@ class App
         Model::init($pdo);
     }
 
-    public function handleRequest()
+    public function run()
     {
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];

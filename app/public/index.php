@@ -32,7 +32,7 @@ $app->post('/product-minus',CartController::class, 'minus', \Request\MinusReques
 $app->post('/order', OrderController::class, 'checkout', \Request\OrderRequest::class);
 
 
-$app->handleRequest();
+$app->run();
 
 
 
