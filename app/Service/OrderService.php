@@ -11,10 +11,10 @@ class OrderService
 {
     public function create(int $userId, string $phone, string $address)
     {
+        $cartItems = UserProduct::getCartItems($userId);
+
         $pdo = Model::getPDO();
         $pdo->beginTransaction();
-
-        $cartItems = UserProduct::getCartItems($userId);
 
         try {
             $orderId = Order::create($userId, $phone, $address);

@@ -4,17 +4,20 @@ use PDO;
 
 class Model
 {
-    protected static PDO $pdo;
+    protected static ?PDO $pdo = null;
 
     public static function getPDO() : PDO
     {
-        $dbHost = getenv('DB_HOST', 'db');
-        $dbName = getenv('DB_NAME', 'dbtest');
-        $dbUser = getenv('DB_USER', 'dbuser');
-        $dbPassword = getenv('DB_PASSWORD', 'dbpwd');
+        if (self::$pdo === null) {
+
+            $dbHost = getenv('DB_HOST', 'db');
+            $dbName = getenv('DB_NAME', 'dbtest');
+            $dbUser = getenv('DB_USER', 'dbuser');
+            $dbPassword = getenv('DB_PASSWORD', 'dbpwd');
 
 
-        self::$pdo = new PDO("pgsql:host=$dbHost;port=5432;dbname=$dbName", "$dbUser", "$dbPassword");
+            self::$pdo = new PDO("pgsql:host=$dbHost;port=5432;dbname=$dbName", "$dbUser", "$dbPassword");
+        }
 
         return self::$pdo;
     }
