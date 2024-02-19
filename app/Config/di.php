@@ -10,6 +10,16 @@ use Controller\UserController;
 
 $container = new Container();
 
+$container->set(PDO::class, function () {
+    $dbHost = getenv('DB_HOST', 'db');
+    $dbName = getenv('DB_NAME', 'dbtest');
+    $dbUser = getenv('DB_USER', 'dbuser');
+    $dbPassword = getenv('DB_PASSWORD', 'dbpwd');
+
+
+    return new PDO("pgsql:host=$dbHost;port=5432;dbname=$dbName", "$dbUser", "$dbPassword");
+});
+
 $container->set(AuthenticationServiceInterface::class, function () {
     return new SessionAuthenticationServiceService();
 });

@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Container\Container;
+use Model\Model;
 use Request\Request;
 use Service\LoggerService;
 
@@ -41,12 +42,20 @@ class App
 
     }
 
+    public function bootstrap()
+    {
+        $pdo = $this->container->get(\PDO::class);
+        Model::init($pdo);
+    }
+
     public function handleRequest()
     {
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         if (isset($this->routes[$requestUri][$requestMethod])) {
+            //$this->bootstrap();
+
             $route = $this->routes[$requestUri][$requestMethod];
             $class = $route['class'];
             $method = $route['method'];

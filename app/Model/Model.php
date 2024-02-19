@@ -6,6 +6,11 @@ class Model
 {
     protected static ?PDO $pdo = null;
 
+    public static function init(PDO $pdo)
+    {
+        static::$pdo = $pdo;
+    }
+
     public static function getPDO() : PDO
     {
         if (self::$pdo === null) {
