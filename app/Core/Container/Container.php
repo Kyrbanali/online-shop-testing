@@ -36,6 +36,4 @@ class Container implements ContainerInterface
 
         return new $instance;
     }
-
-
 }

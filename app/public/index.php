@@ -12,7 +12,7 @@ require_once './../Core/Autoloader.php';
 
 Autoloader::registrate();
 
-require_once './../Config/di.php';
+require_once './../Config/services.php';
 
 $app = new App($container);
 

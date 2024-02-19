@@ -14,7 +14,8 @@ class OrderService
         $cartItems = UserProduct::getCartItems($userId);
 
         $pdo = Model::getPDO();
-        //$pdo->beginTransaction();
+
+        $pdo->beginTransaction();
 
         try {
             $orderId = Order::create($userId, $phone, $address);
@@ -22,6 +23,8 @@ class OrderService
             foreach ($cartItems as $cartItem) {
                 OrderItem::create($orderId, $cartItem->getProductId(), $cartItem->getQuantity());
             }
+
+            $pdo->commit();
 
         } catch (\Throwable $exception) {
             $file = $exception->getFile();
