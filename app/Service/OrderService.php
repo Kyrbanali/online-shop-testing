@@ -14,7 +14,7 @@ class OrderService
         $cartItems = UserProduct::getCartItems($userId);
 
         $pdo = Model::getPDO();
-        $pdo->beginTransaction();
+        //$pdo->beginTransaction();
 
         try {
             $orderId = Order::create($userId, $phone, $address);

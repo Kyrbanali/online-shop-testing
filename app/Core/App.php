@@ -42,56 +42,44 @@ class App
 
     }
 
-    public function bootstrap()
+    public function bootstrap(): void
     {
         $pdo = $this->container->get(\PDO::class);
         Model::init($pdo);
     }
 
-    public function run()
+    public function run(): void
     {
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         if (isset($this->routes[$requestUri][$requestMethod])) {
-            //$this->bootstrap();
+            $this->bootstrap();
 
             $route = $this->routes[$requestUri][$requestMethod];
             $class = $route['class'];
             $method = $route['method'];
             $request = $route['request'];
 
-            if (class_exists($class)) {
+            $obj = $this->container->get($class);
 
-                $obj = $this->container->get($class);
-
-                if (method_exists($obj, $method))
-                {
-                    if (isset($request)) {
-                        $request = new $route['request']($requestMethod, $requestUri, headers_list(), $_REQUEST);
-                    } else {
-                        $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
-                    }
-
-                    try {
-                        $obj->$method($request);
-
-                    } catch (\Throwable $exception) {
-                        $file = $exception->getFile();
-                        $line = $exception->getLine();
-                        $message = $exception->getMessage();
-
-                        LoggerService::error($file, $line, $message);
-
-
-                        require_once './../View/500.html';
-                    }
-
-                } else {
-                    echo "Метод $method не найден в классе $class";
-                }
+            if (isset($request)) {
+                $request = new $route['request']($requestMethod, $requestUri, headers_list(), $_REQUEST);
             } else {
-                echo "Класс $class не найден";
+                $request = new Request($requestMethod, $requestUri, headers_list(), $_REQUEST);
+            }
+
+            try {
+                $obj->$method($request);
+
+            } catch (\Throwable $exception) {
+                $file = $exception->getFile();
+                $line = $exception->getLine();
+                $message = $exception->getMessage();
+
+                LoggerService::error($file, $line, $message);
+
+                require_once './../View/500.html';
             }
         } else {
             require_once './../View/404.html';
