@@ -2,20 +2,26 @@
 
 namespace Service;
 
-use Model\Model;
 use Model\Order;
 use Model\OrderItem;
 use Model\UserProduct;
+use Service\Logger\LoggerService;
 
 class OrderService
 {
-    public function create(int $userId, string $phone, string $address)
+    private \PDO $pdo;
+
+    public function __construct(\PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function create(int $userId, string $phone, string $address): bool
     {
         $cartItems = UserProduct::getCartItems($userId);
 
-        $pdo = Model::getPDO();
+        $this->pdo->beginTransaction();
 
-        $pdo->beginTransaction();
 
         try {
             $orderId = Order::create($userId, $phone, $address);
@@ -24,7 +30,9 @@ class OrderService
                 OrderItem::create($orderId, $cartItem->getProductId(), $cartItem->getQuantity());
             }
 
-            $pdo->commit();
+            $this->pdo->commit();
+
+            return true;
 
         } catch (\Throwable $exception) {
             $file = $exception->getFile();
@@ -33,7 +41,9 @@ class OrderService
 
             LoggerService::error($file, $line, $message);
 
-            $pdo->rollBack();
+            $this->pdo->rollBack();
         }
+
+        return false;
     }
 }

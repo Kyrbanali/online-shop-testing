@@ -16,7 +16,7 @@ class UserController
         $this->authenticationService = $authenticationService;
     }
 
-    public function postLogin(LoginRequest $request)
+    public function postLogin(LoginRequest $request): array
     {
         $errors = $request->validate();
         if (empty($errors))
@@ -32,12 +32,19 @@ class UserController
                 $errors['user'] = "Пользователь с такими данными не зарегистрирован";
             }
         }
-        require_once('./../View/get_login.phtml');
+        return [
+            'view' => 'get_login.phtml',
+            'params' => [
+                'errors' => $errors,
+            ],
+        ];
     }
 
-    public function getLogin()
+    public function getLogin(): array
     {
-        require_once './../View/get_login.phtml';
+        return [
+            'view' => 'get_login.phtml',
+        ];
     }
 
     public function logout()
@@ -46,7 +53,7 @@ class UserController
         header('Location: /login');
     }
 
-    public function postRegistrate(RegistrateRequest $request)
+    public function postRegistrate(RegistrateRequest $request): array
     {
         $errors = $request->validate();
 
@@ -61,12 +68,18 @@ class UserController
             header('Location: /login');
 
         }
-        require_once './../View/get_registrate.phtml';
-    }
 
-    public function getRegistrate()
+        return [
+            'view' => 'get_registrate.phtml',
+            'params' => [
+                'errors' => $errors,
+            ],
+        ];    }
+
+    public function getRegistrate(): array
     {
-        require_once './../View/get_registrate.phtml';
-    }
+        return [
+            'view' => 'get_registrate.phtml',
+        ];    }
 
 }

@@ -14,7 +14,7 @@ class ProductController
         $this->authenticationService = $authenticationService;
     }
 
-    public function getCatalog()
+    public function getCatalog(): array
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
@@ -22,11 +22,13 @@ class ProductController
         }
         $userId = $user->getId();
 
-        $products = Product::getAll();
-        $cartQuantity = UserProduct::getCartQuantity($userId);;
+        return [
+            'view' => 'catalog.phtml',
+            'params' => [
+                'products' => Product::getAll(),
+                'cartQuantity' => UserProduct::getCartQuantity($userId),
+            ],
 
-        require_once './../View/catalog.phtml';
+        ];
     }
-
-
 }

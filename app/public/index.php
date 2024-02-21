@@ -6,13 +6,16 @@ use Controller\ProductController;
 use Controller\UserController;
 use Core\App;
 use Core\Autoloader;
+use Core\Container\Container;
 
 
 require_once './../Core/Autoloader.php';
 
 Autoloader::registrate();
 
-require_once './../Config/services.php';
+$services = include './../Config/services.php';
+
+$container = new Container($services);
 
 $app = new App($container);
 

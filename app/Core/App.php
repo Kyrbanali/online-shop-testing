@@ -5,7 +5,7 @@ namespace Core;
 use Core\Container\Container;
 use Model\Model;
 use Request\Request;
-use Service\LoggerService;
+use Service\Logger\LoggerService;
 
 class App
 {
@@ -70,7 +70,20 @@ class App
             }
 
             try {
-                $obj->$method($request);
+                $response = $obj->$method($request);
+
+                if (isset($response['params'])) {
+                    $params = $response['params'];
+
+                    extract($params);
+                }
+
+                if (isset($response['view'])) {
+                    $view = $response['view'];
+
+                    require_once "./../View/$view";
+                }
+
 
             } catch (\Throwable $exception) {
                 $file = $exception->getFile();

@@ -20,7 +20,7 @@ class OrderController
         $this->orderService = $orderService;
     }
 
-    public function checkout(OrderRequest $request): void
+    public function checkout(OrderRequest $request)
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
@@ -36,9 +36,15 @@ class OrderController
             if (empty($errors)) {
                 $phone = $request->getPhone();
                 $address = $request->getAddress();
-                $this->orderService->create($userId, $phone, $address);
+                $result = $this->orderService->create($userId, $phone, $address);
+
+                if (!$result) {
+                    //заказ не был собран, обратитесь в службу поддержки
+                }
             }
         }
+
+
     }
 
 

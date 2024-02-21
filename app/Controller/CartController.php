@@ -16,7 +16,7 @@ class CartController
         $this->authenticationService = $authenticationService;
     }
 
-    public function getCart(): void
+    public function getCart(): array
     {
         $user = $this->authenticationService->getCurrentUser();
         if (!$user) {
@@ -36,11 +36,15 @@ class CartController
             }
         }
 
-        $cartQuantity = UserProduct::getCartQuantity($userId);;
-
-        $totalPrice = 0;
-
-        require_once './../View/cart.phtml';
+        return [
+            'view' => 'cart.phtml',
+            'params' => [
+                'userProducts' => UserProduct::getCartItems($userId),
+                'products' => Product::getAllByIds($productIds),
+                'totalPrice' => 0,
+                'cartQuantity' => UserProduct::getCartQuantity($userId),
+            ],
+        ];
     }
 
     public function plus(PlusRequest $request): void

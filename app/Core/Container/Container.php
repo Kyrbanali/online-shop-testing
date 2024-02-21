@@ -7,6 +7,11 @@ class Container implements ContainerInterface
     private array $services;
     private array $instances;
 
+    public function __construct(array $services = [])
+    {
+        $this->services = $services;
+    }
+
     public function set(string $class, callable $callback)
     {
         $this->services[$class] = $callback;
