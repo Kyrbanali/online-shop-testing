@@ -174,7 +174,7 @@ class UserProduct extends Model
         return $count > 0;
     }
 
-    private static function hydrate(array $products, bool $associative = false): ?array
+    private static function hydrate(array $products): ?array
     {
         $data = [];
 
