@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Core\ViewRenderer;
 use Model\Order;
 use Model\OrderItem;
 use Model\UserProduct;
@@ -9,14 +10,13 @@ use Request\OrderRequest;
 use Service\Authentication\AuthenticationServiceInterface;
 use Service\OrderService;
 
-class OrderController
+class OrderController extends BaseController
 {
-    private AuthenticationServiceInterface $authenticationService;
     private OrderService $orderService;
 
-    public function __construct(AuthenticationServiceInterface $authenticationService, OrderService $orderService)
+    public function __construct(AuthenticationServiceInterface $authenticationService, ViewRenderer $renderer, OrderService $orderService)
     {
-        $this->authenticationService = $authenticationService;
+        parent::__construct($authenticationService, $renderer);
         $this->orderService = $orderService;
     }
 

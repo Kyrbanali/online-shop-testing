@@ -9,17 +9,8 @@ use Request\MinusRequest;
 use Request\PlusRequest;
 use Service\Authentication\AuthenticationServiceInterface;
 
-class CartController
+class CartController extends BaseController
 {
-    private AuthenticationServiceInterface $authenticationService;
-    private ViewRenderer $renderer;
-
-    public function __construct(AuthenticationServiceInterface $authenticationService, ViewRenderer $renderer)
-    {
-        $this->authenticationService = $authenticationService;
-        $this->renderer = $renderer;
-    }
-
     public function getCart(): string
     {
         $user = $this->authenticationService->getCurrentUser();

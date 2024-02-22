@@ -7,17 +7,8 @@ use Model\Product;
 use Model\UserProduct;
 use Service\Authentication\AuthenticationServiceInterface;
 
-class ProductController
+class ProductController extends BaseController
 {
-    private AuthenticationServiceInterface $authenticationService;
-    private ViewRenderer $renderer;
-
-    public function __construct(AuthenticationServiceInterface $authenticationService, ViewRenderer $renderer)
-    {
-        $this->authenticationService = $authenticationService;
-        $this->renderer = $renderer;
-    }
-
     public function getCatalog(): string
     {
         $user = $this->authenticationService->getCurrentUser();

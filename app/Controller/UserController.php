@@ -8,17 +8,8 @@ use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Service\Authentication\AuthenticationServiceInterface;
 
-class UserController
+class UserController extends BaseController
 {
-    private AuthenticationServiceInterface $authenticationService;
-    private ViewRenderer $renderer;
-
-    public function __construct(AuthenticationServiceInterface $authenticationService, ViewRenderer $renderer)
-    {
-        $this->authenticationService = $authenticationService;
-        $this->renderer = $renderer;
-    }
-
     public function postLogin(LoginRequest $request): string
     {
         $errors = $request->validate();

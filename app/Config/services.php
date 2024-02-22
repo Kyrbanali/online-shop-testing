@@ -49,8 +49,9 @@ return [
     },
     OrderController::class => function (Container $container) {
         $authenticationService = $container->get(AuthenticationServiceInterface::class);
+        $renderer = $container->get(\Core\ViewRenderer::class);
         $orderService = $container->get(OrderService::class);
 
-        return new OrderController($authenticationService, $orderService);
+        return new OrderController($authenticationService, $renderer, $orderService);
     },
 ];
