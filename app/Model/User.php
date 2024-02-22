@@ -113,7 +113,6 @@ class User extends Model implements \JsonSerializable
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'password' => $this->password
         ];
     }
 }

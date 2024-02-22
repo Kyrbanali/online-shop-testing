@@ -54,4 +54,11 @@ return [
 
         return new OrderController($authenticationService, $renderer, $orderService);
     },
+    \Controller\Api\UserController::class => function (Container $container) {
+        $authenticationService = $container->get(AuthenticationServiceInterface::class);
+        $renderer = $container->get(\Core\ViewRenderer::class);
+
+        return new \Controller\Api\UserController($authenticationService, $renderer);
+
+    }
 ];
