@@ -22,7 +22,7 @@ $app = new App($container);
 $app->get('/registrate',UserController::class, 'getRegistrate');
 $app->post('/registrate',UserController::class, 'postRegistrate', \Request\RegistrateRequest::class);
 
-$app->get('/login',UserController::class, 'getLogin', );
+$app->get('/login',UserController::class, 'getLogin');
 $app->post('/login',UserController::class, 'postLogin', \Request\LoginRequest::class);
 
 $app->get('/logout',UserController::class, 'logout');

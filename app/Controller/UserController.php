@@ -41,8 +41,11 @@ class UserController
 
     public function getLogin(): string
     {
-        return $this->renderer->render('get_login.phtml');
+        if ($this->authenticationService->check()) {
+            header("Location: /catalog");
+        }
 
+        return $this->renderer->render('get_login.phtml');
     }
 
     public function logout()
@@ -73,6 +76,10 @@ class UserController
 
     public function getRegistrate(): string
     {
+        if ($this->authenticationService->check()) {
+            header("Location: /catalog");
+        }
+
         return $this->renderer->render('get_registrate.phtml');
 
     }
