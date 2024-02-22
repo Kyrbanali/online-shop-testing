@@ -1,6 +1,6 @@
 <?php
 namespace Model;
-class User extends Model
+class User extends Model implements \JsonSerializable
 {
     private int $id;
     private string $name;
@@ -107,4 +107,13 @@ class User extends Model
     }
 
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password
+        ];
+    }
 }
