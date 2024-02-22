@@ -26,20 +26,26 @@ return [
 
         return new OrderService($pdo);
     },
+    \Core\ViewRenderer::class => function () {
+        return new \Core\ViewRenderer();
+    },
     UserController::class => function (Container $container) {
         $authenticationService = $container->get(AuthenticationServiceInterface::class);
+        $renderer = $container->get(\Core\ViewRenderer::class);
 
-        return new UserController($authenticationService);
+        return new UserController($authenticationService, $renderer);
     },
     ProductController::class => function (Container $container) {
         $authenticationService = $container->get(AuthenticationServiceInterface::class);
+        $renderer = $container->get(\Core\ViewRenderer::class);
 
-        return new ProductController($authenticationService);
+        return new ProductController($authenticationService, $renderer);
     },
     CartController::class => function (Container $container) {
         $authenticationService = $container->get(AuthenticationServiceInterface::class);
+        $renderer = $container->get(\Core\ViewRenderer::class);
 
-        return new CartController($authenticationService);
+        return new CartController($authenticationService, $renderer);
     },
     OrderController::class => function (Container $container) {
         $authenticationService = $container->get(AuthenticationServiceInterface::class);

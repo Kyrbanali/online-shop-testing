@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Core\ViewRenderer;
 use Model\User;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
@@ -10,13 +11,15 @@ use Service\Authentication\AuthenticationServiceInterface;
 class UserController
 {
     private AuthenticationServiceInterface $authenticationService;
+    private ViewRenderer $renderer;
 
-    public function __construct(AuthenticationServiceInterface $authenticationService)
+    public function __construct(AuthenticationServiceInterface $authenticationService, ViewRenderer $renderer)
     {
         $this->authenticationService = $authenticationService;
+        $this->renderer = $renderer;
     }
 
-    public function postLogin(LoginRequest $request): array
+    public function postLogin(LoginRequest $request): string
     {
         $errors = $request->validate();
         if (empty($errors))
@@ -32,19 +35,14 @@ class UserController
                 $errors['user'] = "Пользователь с такими данными не зарегистрирован";
             }
         }
-        return [
-            'view' => 'get_login.phtml',
-            'params' => [
-                'errors' => $errors,
-            ],
-        ];
+
+        return $this->renderer->render('get_login.phtml', ['errors' => $errors]);
     }
 
-    public function getLogin(): array
+    public function getLogin(): string
     {
-        return [
-            'view' => 'get_login.phtml',
-        ];
+        return $this->renderer->render('get_login.phtml');
+
     }
 
     public function logout()
@@ -53,7 +51,7 @@ class UserController
         header('Location: /login');
     }
 
-    public function postRegistrate(RegistrateRequest $request): array
+    public function postRegistrate(RegistrateRequest $request): string
     {
         $errors = $request->validate();
 
@@ -69,17 +67,14 @@ class UserController
 
         }
 
-        return [
-            'view' => 'get_registrate.phtml',
-            'params' => [
-                'errors' => $errors,
-            ],
-        ];    }
+        return $this->renderer->render('get_registrate.phtml', ['errors' => $errors]);
 
-    public function getRegistrate(): array
+    }
+
+    public function getRegistrate(): string
     {
-        return [
-            'view' => 'get_registrate.phtml',
-        ];    }
+        return $this->renderer->render('get_registrate.phtml');
+
+    }
 
 }

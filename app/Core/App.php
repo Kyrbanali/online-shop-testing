@@ -72,19 +72,7 @@ class App
             try {
                 $response = $obj->$method($request);
 
-                if (isset($response['params'])) {
-                    $params = $response['params'];
-
-                    extract($params);
-                }
-
-                if (isset($response['view'])) {
-                    $view = $response['view'];
-
-                    require_once "./../View/$view";
-                }
-
-
+                echo $response;
             } catch (\Throwable $exception) {
                 $file = $exception->getFile();
                 $line = $exception->getLine();
