@@ -2,11 +2,9 @@
 
 namespace Controller;
 
-use Core\ViewRenderer;
 use Model\User;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
-use Service\Authentication\AuthenticationServiceInterface;
 
 class UserController extends BaseController
 {
@@ -39,7 +37,7 @@ class UserController extends BaseController
         return $this->renderer->render('get_login.phtml');
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->authenticationService->logout();
         header('Location: /login');

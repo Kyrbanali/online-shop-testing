@@ -2,10 +2,8 @@
 
 namespace Controller;
 
-use Core\ViewRenderer;
 use Model\Product;
 use Model\UserProduct;
-use Service\Authentication\AuthenticationServiceInterface;
 
 class ProductController extends BaseController
 {

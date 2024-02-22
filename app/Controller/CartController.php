@@ -2,12 +2,10 @@
 
 namespace Controller;
 
-use Core\ViewRenderer;
 use Model\Product;
 use Model\UserProduct;
 use Request\MinusRequest;
 use Request\PlusRequest;
-use Service\Authentication\AuthenticationServiceInterface;
 
 class CartController extends BaseController
 {

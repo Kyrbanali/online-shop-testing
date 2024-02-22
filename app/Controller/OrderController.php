@@ -3,8 +3,6 @@
 namespace Controller;
 
 use Core\ViewRenderer;
-use Model\Order;
-use Model\OrderItem;
 use Model\UserProduct;
 use Request\OrderRequest;
 use Service\Authentication\AuthenticationServiceInterface;

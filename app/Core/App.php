@@ -39,7 +39,6 @@ class App
             'method' => $methodName,
             'request' => $request,
         ];
-
     }
 
     public function bootstrap(): void
