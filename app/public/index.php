@@ -1,17 +1,13 @@
 <?php
 
-use Controller\CartController;
-use Controller\OrderController;
-use Controller\ProductController;
-use Controller\UserController;
-use Core\App;
-use Core\Autoloader;
-use Core\Container\Container;
+use Controller\CartController;use Controller\OrderController;use Controller\ProductController;use Controller\UserController;
+use Kurbanali\MyCore\Autoloader;
+use Kurbanali\MyCore\App;
+use Kurbanali\MyCore\Container\Container;
 
+require_once './../vendor/autoload.php';
 
-require_once './../Core/Autoloader.php';
-
-Autoloader::registrate();
+Autoloader::registrate(dirname(__DIR__));
 
 $services = include './../Config/services.php';
 
@@ -35,9 +31,7 @@ $app->post('/product-minus',CartController::class, 'minus', \Request\MinusReques
 $app->post('/order', OrderController::class, 'checkout', \Request\OrderRequest::class);
 
 $app->get('/api/users', \Controller\Api\UserController::class, 'index');
-$app->post('/api/users', \Controller\Api\UserController::class, 'create', \Request\CreateUserRequest::class);
-
-$app->get('/test', \Controller\Api\UserController::class, 'test');
+$app->post('/api/users', \Controller\Api\UserController::class, 'create', \Request\Api\CreateUserRequest::class);
 
 $app->run();
 

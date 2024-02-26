@@ -4,7 +4,7 @@ namespace Controller\Api;
 
 use Controller\BaseController;
 use Model\User;
-use Request\CreateUserRequest;
+use Request\Api\CreateUserRequest;
 
 class UserController extends BaseController
 {
@@ -21,23 +21,17 @@ class UserController extends BaseController
     {
         $errors = $request->validate();
 
-        if (empty($errors)){
-            $username = $request->getName();
-            $email = $request->getEmail();
-            $password = $request->getPassword();
+        if (!empty($errors)) {
+            return json_encode($errors);
         }
 
-//        $data = json_decode(file_get_contents('php://input'), true);
-//        // Проверка и валидация данных
-//        $username = isset($data['username']) ? trim($data['username']) : null;
-//        $email = isset($data['email']) ? trim($data['email']) : null;
-//        $password = isset($data['password']) ? trim($data['password']) : null;
+        $username = $request->getName();
+        $email = $request->getEmail();
+        $password = $request->getPassword();
 
-    }
+        $user = User::create($username, $email, $password);
 
-    public function test()
-    {
-        return $this->renderer->render('create_user.html');
+        return json_encode($user, JSON_THROW_ON_ERROR);
 
     }
 

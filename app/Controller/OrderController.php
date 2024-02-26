@@ -2,11 +2,10 @@
 
 namespace Controller;
 
-use Core\ViewRenderer;
-use Model\UserProduct;
-use Request\OrderRequest;
-use Service\Authentication\AuthenticationServiceInterface;
-use Service\OrderService;
+use Kurbanali\MyCore\AuthenticationServiceInterface;
+use Kurbanali\MyCore\ViewRenderer;
+use Model\UserProduct;use Request\OrderRequest;use Service\OrderService;
+
 
 class OrderController extends BaseController
 {

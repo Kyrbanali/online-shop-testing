@@ -1,0 +1,19 @@
+{
+    "name": "kurbanali/online-shop-test",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Kurbanali\\OnlineShopTest\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kurbanali",
+            "email": "arslanaliev.ruby@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "kurbanali/my-core": "dev-main"
+    }
+}

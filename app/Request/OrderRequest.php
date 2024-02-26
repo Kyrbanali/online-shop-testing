@@ -2,6 +2,8 @@
 
 namespace Request;
 
+use Kurbanali\MyCore\Request\Request;
+
 class OrderRequest extends Request
 {
     public function getPhone()

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Container;
+namespace Kurbanali\MyCore\Container;
 
 interface ContainerInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Service\Logger;
+namespace Kurbanali\MyCore\Logger;
 
-class LoggerService implements LoggerInterface
+class LoggerService
 {
     private const STORAGE_PATH = "/app/Storage/Logs/";
 

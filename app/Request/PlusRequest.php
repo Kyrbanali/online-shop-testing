@@ -2,6 +2,8 @@
 
 namespace Request;
 
+use Kurbanali\MyCore\Request\Request;
+
 class PlusRequest extends Request
 {
     public function getProductId(): ?int

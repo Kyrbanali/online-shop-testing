@@ -2,7 +2,8 @@
 
 namespace Model;
 
-use http\Encoding\Stream\Inflate;
+
+use Kurbanali\MyCore\Model\Model;
 
 class Order extends Model
 {

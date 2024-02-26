@@ -1,9 +1,11 @@
 <?php
 
 namespace Service\Authentication;
+
+use Kurbanali\MyCore\AuthenticationServiceInterface;
 use Model\User;
 
-class SessionAuthenticationServiceService implements AuthenticationServiceInterface
+class SessionAuthenticationService implements AuthenticationServiceInterface
 {
     private User $user;
 

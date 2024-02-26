@@ -2,8 +2,9 @@
 
 namespace Controller;
 
-use Core\ViewRenderer;
-use Service\Authentication\AuthenticationServiceInterface;
+
+use Kurbanali\MyCore\AuthenticationServiceInterface;
+use Kurbanali\MyCore\ViewRenderer;
 
 abstract class BaseController
 {

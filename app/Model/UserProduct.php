@@ -1,5 +1,8 @@
 <?php
 namespace Model;
+
+use Kurbanali\MyCore\Model\Model;
+
 class UserProduct extends Model
 {
     private int $id;

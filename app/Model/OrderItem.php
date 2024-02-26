@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use Kurbanali\MyCore\Model\Model;
+
 class OrderItem extends Model
 {
     private int $id;

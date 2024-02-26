@@ -2,6 +2,8 @@
 
 namespace Request;
 
+use Kurbanali\MyCore\Request\Request;
+
 class RegistrateRequest extends Request
 {
     public function getName(): string

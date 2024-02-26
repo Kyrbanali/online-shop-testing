@@ -2,6 +2,8 @@
 
 namespace Request;
 
+use Kurbanali\MyCore\Request\Request;
+
 class MinusRequest extends Request
 {
     public function getProductId(): ?int

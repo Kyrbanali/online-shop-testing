@@ -1,6 +1,6 @@
 <?php
 
-namespace Service\Authentication;
+namespace Kurbanali\MyCore;
 use Model\User;
 
 interface AuthenticationServiceInterface

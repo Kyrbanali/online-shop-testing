@@ -2,9 +2,10 @@
 
 namespace Service\Authentication;
 
+use Kurbanali\MyCore\AuthenticationServiceInterface;
 use Model\User;
 
-class CookieAuthenticationServiceService implements AuthenticationServiceInterface
+class CookieAuthenticationService implements AuthenticationServiceInterface
 {
     public function login(string $email, string $password) : bool
     {

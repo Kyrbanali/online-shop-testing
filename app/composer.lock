@@ -1,0 +1,54 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "c054ede7be01155b634f21f6c665a9db",
+    "packages": [
+        {
+            "name": "kurbanali/my-core",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kyrbanali/my-core.git",
+                "reference": "c5b17d74af8489f07b202c2f87bd366c9287760d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kyrbanali/my-core/zipball/c5b17d74af8489f07b202c2f87bd366c9287760d",
+                "reference": "c5b17d74af8489f07b202c2f87bd366c9287760d",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kurbanali\\MyCore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Kurbanali",
+                    "email": "arslanaliev.ruby@gmail.com"
+                }
+            ],
+            "description": "My first package",
+            "support": {
+                "issues": "https://github.com/Kyrbanali/my-core/issues",
+                "source": "https://github.com/Kyrbanali/my-core/tree/main"
+            },
+            "time": "2024-02-25T10:16:29+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

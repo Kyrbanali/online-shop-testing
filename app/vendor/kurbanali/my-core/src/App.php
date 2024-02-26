@@ -1,11 +1,13 @@
 <?php
 
-namespace Core;
+namespace Kurbanali\MyCore;
 
-use Core\Container\Container;
-use Model\Model;
-use Request\Request;
-use Service\Logger\LoggerService;
+
+
+use Kurbanali\MyCore\Container\Container;
+use Kurbanali\MyCore\Logger\LoggerService;
+use Kurbanali\MyCore\Model\Model;
+use Kurbanali\MyCore\Request\Request;
 
 class App
 {

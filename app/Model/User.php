@@ -1,5 +1,8 @@
 <?php
 namespace Model;
+
+use Kurbanali\MyCore\Model\Model;
+
 class User extends Model implements \JsonSerializable
 {
     private int $id;
@@ -75,7 +78,7 @@ class User extends Model implements \JsonSerializable
         return self::hydrate($data);
     }
 
-    public static function getOneById(string $id): ?User
+    public static function getOneById(int $id): ?User
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
         $stmt->execute(['id' => $id]);
@@ -88,12 +91,32 @@ class User extends Model implements \JsonSerializable
         return self::hydrate($data);
     }
 
-    public static function create($name, $email, $password): void
+    public static function create($name, $email, $password): ?User
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = self::getPDO()->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :hash)');
-        $stmt->execute(['name' => $name, 'email' => $email, 'hash' => $hash]);
+        $sql = <<<SQL
+        INSERT INTO users (name, email, password)
+        VALUES (:name, :email, :hash)
+        RETURNING id
+        SQL;
+
+        $data = [
+            'name' => $name,
+            'email' => $email,
+            'hash' => $hash
+        ];
+
+        $stmt = self::prepareExecute($sql, $data);
+        $result = $stmt->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        $userId = $result['id'];
+
+        return self::getOneById($userId);
     }
 
     private static function hydrate(array $data): User

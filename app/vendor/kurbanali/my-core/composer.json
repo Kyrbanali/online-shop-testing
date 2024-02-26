@@ -1,0 +1,17 @@
+{
+    "name": "kurbanali/my-core",
+    "description": "My first package",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Kurbanali\\MyCore\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kurbanali",
+            "email": "arslanaliev.ruby@gmail.com"
+        }
+    ],
+    "require": {}
+}

@@ -1,6 +1,9 @@
 <?php
 
-namespace Request;
+namespace Request\Api;
+
+
+use Kurbanali\MyCore\Request\Request;
 
 class CreateUserRequest extends Request
 {

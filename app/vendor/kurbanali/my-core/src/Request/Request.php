@@ -1,6 +1,6 @@
 <?php
 
-namespace Request;
+namespace Kurbanali\MyCore\Request;
 
 class Request
 {

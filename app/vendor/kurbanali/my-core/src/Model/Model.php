@@ -1,5 +1,5 @@
 <?php
-namespace Model;
+namespace Kurbanali\MyCore\Model;
 use PDO;
 
 class Model

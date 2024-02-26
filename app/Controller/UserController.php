@@ -52,7 +52,7 @@ class UserController extends BaseController
             $email = $request->getEmail();
             $password = $request->getPassword();
 
-            User::create($name, $email, $password);
+            $user = User::create($name, $email, $password);
 
 
             header('Location: /login');
