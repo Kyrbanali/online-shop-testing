@@ -7,7 +7,7 @@ use Kurbanali\MyCore\Container\Container;
 
 require_once './../vendor/autoload.php';
 
-Autoloader::registrate(dirname(__DIR__));
+Autoloader::registrate();
 
 $services = include './../Config/services.php';
 
